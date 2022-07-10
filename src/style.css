@@ -1,0 +1,97 @@
+*
+{
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body
+{
+    height: 100vh;
+    font-family: 'Poppins';
+}
+/* #c {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  #container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  } */
+
+section#labels {
+    position: absolute;
+    left: 0;
+    top: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 500px;
+    z-index: 999;
+}
+
+h2 {
+    /* position: absolute; */
+    z-index: 999;
+    color: purple;
+}
+
+h3 {
+    position: absolute;
+    z-index: 999;
+    color: white;
+    left: 25vw;
+    top: 25vh;
+}
+
+canvas {
+    display: block;
+}
+
+.webgl
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    outline: none;
+}
+
+.label {
+    display: block!important;
+    z-index: 999;
+    font-family: sans-serif;
+    padding: .5rem;
+    background: rgba( 0, 0, 0, .6 );
+    width: 200px;
+    height: auto;
+    cursor: pointer;
+}
+
+.label:first-child {
+    font-size: .75rem;
+    color: yellow;
+    font-weight: bolder;
+}
+
+.annotationDescription {
+    font-size: .5rem;
+    color: white;
+}
+
+
+.active {
+    display: block;
+  }
+
+.panel {
+    display: none;
+    z-index: 1;
+    padding: 0 18px;
+    background-color: white;
+  /*   max-height: 0; */
+    overflow: hidden;
+    transition: display 0.2s ease-out;
+  }
