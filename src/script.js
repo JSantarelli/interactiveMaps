@@ -23,22 +23,13 @@ const myObj = {
       return stadium.name;
     },
     facilities: [
-      {index: 1, name:"Estadio Mundialista", description: "Inaugurado en 1978, cuenta con una capacidad para 35.500 espectadores", sports:["Fúbol", "Atletismo", "Rugby"], year: 1978, positionX: 150, positionY: 300 },
-      {index: 2, name:"Estadio Islas Malvinas", description: "Inaugurado en 1978, cuenta con una capacidad para 35.500 espectadores", sports:["Tenis", "Voley", "Handbol"], year: 1995, positionX: 250, positionY: 500 },
-          {index: 3, name:"Natatorio Zorrilla", description: "Inaugurado en 1978, cuenta con una capacidad para 35.500 espectadores", sports:["Natación", "Clavadismo", "Waterpolo"], year: 1995, positionX: 300, positionY: 150 }
+        {index: 1, name:"Estadio Mundialista", description: "Inaugurado en 1978, cuenta con una capacidad para 35.500 espectadores", sports:["Fúbol", "Atletismo", "Rugby"], year: 1978, positionX: 150, positionY: 300 },
+        {index: 2, name:"Estadio Islas Malvinas", description: "Fue inaugurado en 1995 con motivo de la realización de los XV Juegos Panamericanos", sports:["Tenis", "Voley", "Handbol"], year: 1995, positionX: 250, positionY: 500 },
+        {index: 3, name:"Natatorio Zorrilla", description: "Fue inaugurado en 1995 con motivo de la realización de los XV Juegos Panamericanos", sports:["Natación", "Clavadismo", "Waterpolo"], year: 1995, positionX: 300, positionY: 150 }
     ]
   }
 
 let annotationCounter = 0
-
-const infoStadium  = {
-    title: 'Estadio mundialista José María Minella',
-    description: 'Inaugurado en 1978, cuenta con una capacidad para 35.500 espectadores'    
-}
-const swimPool  = {
-    title: 'Natatorio municipal Alberto Zorrilla',
-    description: 'Lorem ipsum...'    
-}
 
 // Create empty object and array
 let annotations = {}
@@ -46,23 +37,7 @@ const annotationMarkers = []
 
 const circleTexture = new THREE.TextureLoader().load('img/textWater.jpg')
 
-// SCENE
-const scene = new THREE.Scene()
-scene.background = new THREE.Color(0xffffff)
-
-// 3D MODEL
-loader.load( "/models/park.gltf", function ( gltf ) {
-        // gltf.scene.scale.set(0.5, 0.5, 0.5); 
-
-    // Getting an individual mesh from 3D Object
-        gltf.scene.traverse(function (child) {
-            // Code to attach annotations to specific model parts...
-            const mesh = (child).clone();
-
-            // Iteration through objects
-
-            if(mesh.name === "Stadium23") {
-                console.log(mesh)
+function createAnnotation(child) {
 
                 // Annotation content
                 const aId = (annotationCounter++).toString()
@@ -80,12 +55,7 @@ loader.load( "/models/park.gltf", function ( gltf ) {
                 })
                 const annotationSprite = new THREE.Sprite(
                     annotationSpriteMaterial
-                )
-                
-                //changing annotation coords to threejs coords
-                // const tmpY = -child.position.y
-                // child.position.y = child.position.z
-                // child.position.z = tmpY
+                )    
                 child.getWorldPosition(annotationSprite.position)
                 annotationSprite.aId = aId
                 child.add(annotationSprite)
@@ -114,10 +84,34 @@ loader.load( "/models/park.gltf", function ( gltf ) {
                     annotationDiv.appendChild(annotationTextDiv)
                     annotations[aId].descriptionDomElement =
                         annotationTextDiv
-                        
                     }
+}
 
-                // do the append
+// SCENE
+const scene = new THREE.Scene()
+scene.background = new THREE.Color(0xffffff)
+
+// 3D MODEL
+loader.load( "/models/park.gltf", function ( gltf ) {
+        // gltf.scene.scale.set(0.5, 0.5, 0.5); 
+
+    // Getting an individual mesh from 3D Object
+        gltf.scene.traverse(function (child) {
+            // Code to attach annotations to specific model parts...
+            const mesh = (child).clone();
+
+            // Iteration through objects
+
+            if(mesh.name === "Stadium23") {
+                createAnnotation(child);
+            }
+
+            if(mesh.name === "Shape15") {
+                createAnnotation(child);
+            }
+
+            if(mesh.name === "Nata202") {
+                createAnnotation(child);
             }
         }
     )
