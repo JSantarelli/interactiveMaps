@@ -59,7 +59,7 @@ canvas {
     outline: none;
 }
 
-.label {
+/* .label {
     display: block!important;
     z-index: 999;
     font-family: sans-serif;
@@ -74,24 +74,45 @@ canvas {
     font-size: .75rem;
     color: yellow;
     font-weight: bolder;
-}
+} */
 
 .annotationDescription {
+    display: none;
     font-size: .5rem;
     color: white;
 }
 
 
-.active {
+.label.active >  .annotationDescription {
     display: block;
-  }
+  } 
 
-.panel {
+/* .panel {
     display: none;
     z-index: 1;
     padding: 0 18px;
     background-color: white;
-  /*   max-height: 0; */
+    max-height: 0;
     overflow: hidden;
     transition: display 0.2s ease-out;
+  } */
+
+
+/* Accordion logic */
+  .label {
+    color: #fff;
+    background-color: #00000042;
+    cursor: pointer;
+    padding: 10px 10px;
+    margin-top:20px;
+    width:  min-content;
+    border: 1px solid #00000042;
+    text-align: left;
+    outline: none;
+    transition: 0.4s;
+  }
+  
+  .active, .label:hover {
+    background-color: #00000042;
+    border: 1px solid #fc8e2d;
   }

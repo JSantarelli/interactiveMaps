@@ -37,6 +37,9 @@ const annotationMarkers = []
 
 const circleTexture = new THREE.TextureLoader().load('img/textWater.jpg')
 
+let annotationDisplay = true;
+
+
 function createAnnotation(child) {
 
                 // Annotation content
@@ -61,31 +64,87 @@ function createAnnotation(child) {
                 child.add(annotationSprite)
                 annotationSprite.layers.set(1)
                 annotationMarkers.push(annotationSprite)
-                console.log(annotationSprite)
+                // console.log(annotationSprite)
 
-                if (myObj.facilities[aId].name) {
-                    const annotationTextDiv = document.createElement('div')
-                    annotationTextDiv.className = 'annotationDescription'
-                    annotationTextDiv.innerHTML = myObj.facilities[aId].name
-                    if (myObj.facilities[aId].name) {
-                        annotationTextDiv.innerHTML +=
-                            '<p>' + myObj.facilities[aId].description + '</p>'
-                    }
-                    // Creating HTML
-                    const annotationDiv = document.createElement('div');
-                    annotationDiv.className = 'label';
-                    annotationDiv.textContent = myObj.facilities[aId].name;
-                    // annotationDiv.innerHTML = aId;
-                    const annotationLabel = new CSS2DObject(annotationDiv);
-                    // annotationLabel.position.set(150, 5, 0);
-                    child.add(annotationLabel);
+                // if (myObj.facilities[aId].name) {
+                const annotationTextDiv = document.createElement('div')
+                annotationTextDiv.className = 'annotationDescription'
+                annotationTextDiv.setAttribute("id", aId)
+                
+                // Creating HTML
+                const annotationDiv = document.createElement('div');
+                annotationDiv.className = 'label';
+                annotationDiv.textContent = myObj.facilities[aId].name;
+                // annotationDiv.innerHTML = aId;
+                const annotationLabel = new CSS2DObject(annotationDiv);
+                // annotationLabel.position.set(150, 5, 0);
+                child.add(annotationLabel);
+
+                // Adding interaction
+                annotationDiv.addEventListener('click', showDescription)
+
+                function showDescription() {
+
+                    var acc = document.getElementsByClassName("label");
+                    var i;
                     
-                    console.log(annotations[aId]);
-                    annotationDiv.appendChild(annotationTextDiv)
-                    annotations[aId].descriptionDomElement =
-                        annotationTextDiv
+                    for (i = 0; i < acc.length; i++) {
+                    acc[i].addEventListener("click", function() {
+                    
+                    var panel = this.nextElementSibling;
+                    if (panel.style.maxHeight){
+                    //   panel.style.maxHeight = null;
+                    } else {
+                      let active = document.querySelectorAll(".label.active");
+                      for(let j = 0; j < active.length; j++){
+                        active[j].classList.remove("active");
+                        // active[j].nextElementSibling.style.maxHeight = null;
+                      }
+                      this.classList.toggle("active");
+                    //   panel.style.maxHeight = panel.scrollHeight + "px";
                     }
-}
+                    });
+                    }
+
+                    // let point = document.getElementsByClassName("label");
+                    // let panel = document.getElementsByClassName("annotationDescription");
+                    // const current = document.getElementById(aId);
+
+                    // Build-in toggle method
+                    // current[aId].className.toggle("active");
+                    
+                    // Replace method option
+                    // current.className = current.className.replace("annotationDescription", "active");
+
+                    // Iterative toggle
+                    // let i;
+                    // for(i = 0; i < panel.length; i++) {
+                    //     panel[i].addEventListener("click", togglePanel, false);
+                    // }
+                        
+                    // Conditional toggle
+                    // if (current.style.display === "none") {
+                    //     current.style.display = "block";
+                    //   } else {
+                    //     current.style.display = "none";
+                    // }
+                    // console.log(current);
+                
+                }
+          
+                if (annotationDisplay) {
+                    // annotationDisplay = true;
+
+                    annotationTextDiv.innerHTML +=
+                        '<p>' + myObj.facilities[aId].description + '</p>'
+                } 
+ 
+                // console.log(annotations[aId]);
+                annotationDiv.appendChild(annotationTextDiv)
+                annotations[aId].descriptionDomElement =
+                    annotationTextDiv
+                }
+// }
 
 // SCENE
 const scene = new THREE.Scene()
