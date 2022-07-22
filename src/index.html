@@ -12,9 +12,51 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
     <script src="script.js"></script>
+    <form class="floating" id="form-edit-client">
+      <fieldset>
+        <!-- Form Name -->
+        <legend>Facility</legend>
+        <!-- Text input-->
+          <label for="facility-name">Name</label>  
+            <input id="facility-name" name="facility-name" type="text" placeholder="Facility name">
+        <!-- Prepended text-->
+          <label for="facility-year">Year</label>
+              <span></span>
+              <input id="facility-year" name="facility-year" placeholder="XXXX" type="text">
+        <!-- Text input-->
+          <label for="facility-desc">Description</label>  
+            <input id="facility-desc" name="facility-desc" type="text" placeholder="Facility description">
+        <!-- Prepended text-->
+          <label for="facility-sports">Sports</label>
+              <span></span>
+              <input id="facility-sports" name="facility-sports" placeholder="XXXX" type="text">
+        <!-- Text input-->
+          <label for="facility-anchor">Anchor</label>  
+            <input id="facility-anchor" name="facility-anchor" type="text" placeholder="Facility name">
+      </fieldset>
+      <label for="btn-save"></label>
+      <div id="saveupdate">
+        <button id="btn-save" name="btn-save">Save</button>
+      </div>
+    </form>
+    <table class="absolute">
+        <thead>
+          <tr>
+            <td>Name</td>
+            <th>Description</th>
+            <th>Sports</th>
+            <th>Year</th>
+            <th>Anchor</th>
+            <th></th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="list">
 
+        </tbody>
+      </table>
     <div id="container">
-        <canvas id="c"></canvas>
+        <ul id="holder"></ul>
         <section id="labels"></section>
     </div>
 

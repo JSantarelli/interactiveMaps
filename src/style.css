@@ -97,6 +97,27 @@ canvas {
     transition: display 0.2s ease-out;
   } */
 
+  .holder {
+    color: black;
+    position: relative;
+    top: 200px;
+    left: 200px;
+  }
+
+  .floating {
+    z-index: 999;
+    position: absolute;
+    top: 100px;
+    left: 50px;
+  }
+
+  .absolute {
+    z-index: 999;
+    position: absolute;
+    top: 200px;
+    left: 50px;
+  }
+
 
 /* Accordion logic */
   .label {
