@@ -186,7 +186,6 @@ let i;
 
 function binding() {
     // Add code block that updates the map!
-    console.log("map updated!")
 }
 
 // Adding facilities
@@ -207,6 +206,7 @@ function addClient() {
 
 const btn = document.getElementById("btn-save");
 btn.addEventListener('click', addClient)
+
 
 // Displaying current facilities
 function displayClients() {    

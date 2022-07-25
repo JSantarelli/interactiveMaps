@@ -11,8 +11,27 @@
      <!-- CRASH COURSE: https://www.youtube.com/watch?v=6oFvqLfRnsU&t=1922s&ab_channel=DesignCourse -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
+    <!-- FIREBASE/JS: https://www.youtube.com/watch?v=ey4k6mW9ds4 -->
+    <script type="module" src="index.js"></script>
+    <script src="environments/environment.js"></script>
     <script src="script.js"></script>
-    <form class="floating" id="form-edit-client">
+
+
+<!-- Example form -->
+<form id="test-form" class="floating">
+
+  <label for="test-name"></label>
+<input type="text" id="test-name" name="test-name" placeholder="name">
+  <label for="test-desc"></label>
+<textarea type="text" id="test-desc" name="test-desc" placeholder="name"></textarea>
+<button type="submit" id="btn-form">push!</button>
+</form>
+<ul id="test-list" class="floating"> 
+
+</ul>
+
+
+    <form id="facility-form">
       <fieldset>
         <!-- Form Name -->
         <legend>Facility</legend>
