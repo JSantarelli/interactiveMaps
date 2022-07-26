@@ -65,7 +65,6 @@ const loader = new GLTFLoader();
   
           facilities.forEach(doc => {
               const facility = doc.data();
-              console.log(doc.id)
   
               html += `
                   <li>
@@ -85,7 +84,22 @@ const loader = new GLTFLoader();
           btnsDelete.forEach(btn => {
               btn.addEventListener('click', ({ target: { dataset }}) => {
                   deleteFacility(dataset.id)
-                  setTimeout(loadMap(), 4000);
+                  console.log(dataset.id)
+
+                // REVIEW CAUSE IT'S DUPLICATING DOM ELEMENTS
+                  facilities.forEach(doc => {
+                      const removedItem = document.getElementById(doc.id);
+                      if(dataset.id === doc.id) {
+                          console.log('removed!')
+                          console.log(removedItem)
+                        //   removedItem.remove();
+                        //   removedItem.style.display = "none";
+                          removedItem.classList.add('removed')
+                    }
+                  })
+
+                // check if item exists
+                // if not exists, then remove from DOM
                 })
           })
 
@@ -116,127 +130,122 @@ const loader = new GLTFLoader();
 
         let annotationDisplay = true;
           
-        // 3D MODEL
-        function loadMap() {
-            
-            loader.load( "/models/park.gltf", function ( gltf ) {
-                // gltf.scene.scale.set(0.5, 0.5, 0.5); 
+        // 3D MODEL            
+        loader.load( "/models/park.gltf", function ( gltf ) {
+            // gltf.scene.scale.set(0.5, 0.5, 0.5); 
 
-            // Getting an individual mesh from 3D Object
-                gltf.scene.traverse(function (child) {
-                    // Code to attach annotations to specific model parts...
-                    const mesh = (child).clone();
-                    let i;
-                    
-                    // Iteration through objects
-                    facilities.forEach(doc => {
-                        const facility = doc.data();
+        // Getting an individual mesh from 3D Object
+            gltf.scene.traverse(function (child) {
+                // Code to attach annotations to specific model parts...
+                const mesh = (child).clone();
+                
+                // Iteration through objects
+                facilities.forEach(doc => {
+                    const facility = doc.data();
 
-                        if(mesh.name === facility.meshName) {
+                    if(mesh.name === facility.meshName) {
 
-                            console.log(mesh.name)
-                            console.log(facility.meshName)
-                                    
-                        function createAnnotation(child) {
-
-                            // Annotation content
-                            const aId = (annotationCounter++).toString()
-                            annotations[aId] = {
-                                title: facility.name,
-                                description: facility.description,
-                            }
-                            
-                            // Defining sprite properties
-                            const annotationSpriteMaterial = new THREE.SpriteMaterial({
-                                map: circleTexture,
-                                depthTest: false,
-                                depthWrite: false,
-                                sizeAttenuation: false,
-                            })
-                            const annotationSprite = new THREE.Sprite(
-                                annotationSpriteMaterial
-                            )    
-                            child.getWorldPosition(annotationSprite.position)
-                            annotationSprite.aId = aId
-                            child.add(annotationSprite)
-                            annotationSprite.layers.set(1)
-                            annotationMarkers.push(annotationSprite)
-                            // console.log(annotationSprite)
-
-                            // if (myObj.facilities[aId].name) {
-                            const annotationTextDiv = document.createElement('div')
-                            annotationTextDiv.className = 'annotationDescription'
-                            annotationTextDiv.setAttribute("id", aId)
-                            
-                            // Creating HTML
-                            const annotationDiv = document.createElement('div');
-                            annotationDiv.className = 'label';
-                            annotationDiv.textContent = facility.name;
-                            // annotationDiv.innerHTML = aId;
-                            const annotationLabel = new CSS2DObject(annotationDiv);
-                            // annotationLabel.position.set(150, 5, 0);
-                            child.add(annotationLabel);
-
-                            // Adding interaction
-                            annotationDiv.addEventListener('click', showDescription)
-
-                            function showDescription() {
-
-                                var acc = document.getElementsByClassName("label");
-                                var i;
+                        console.log(mesh.name)
+                        console.log(facility.meshName)
+                        console.log(doc.id)
                                 
-                                for (i = 0; i < acc.length; i++) {
-                                acc[i].addEventListener("click", function() {
-                                
-                                var panel = this.nextElementSibling;
-                                if (panel.style.maxHeight){
-                                //   panel.style.maxHeight = null;
-                                } else {
-                                let active = document.querySelectorAll(".label.active");
-                                for(let j = 0; j < active.length; j++){
-                                    active[j].classList.remove("active");
-                                    // active[j].nextElementSibling.style.maxHeight = null;
-                                }
-                                this.classList.toggle("active");
-                                //   panel.style.maxHeight = panel.scrollHeight + "px";
-                                }
-                                });
-                                }              
-                            }
+                    function createAnnotation(child) {
 
-                            if (annotationDisplay) {
-                                // annotationDisplay = true;
-
-                                annotationTextDiv.innerHTML +=
-                                    '<p>' + facility.description + '</p>'
-                            } 
-
-                            // console.log(annotations[aId]);
-                            annotationDiv.appendChild(annotationTextDiv)
-                            annotations.descriptionDomElement =
-                                annotationTextDiv
-                            }
-
-                        createAnnotation(child);
-
+                        // Annotation content
+                        const aId = (annotationCounter++).toString()
+                        annotations[aId] = {
+                            title: facility.name,
+                            description: facility.description,
                         }
-                    });
-                }
-            )
+                        
+                        // Defining sprite properties
+                        const annotationSpriteMaterial = new THREE.SpriteMaterial({
+                            map: circleTexture,
+                            depthTest: false,
+                            depthWrite: false,
+                            sizeAttenuation: false,
+                        })
+                        const annotationSprite = new THREE.Sprite(
+                            annotationSpriteMaterial
+                        )    
+                        child.getWorldPosition(annotationSprite.position)
+                        annotationSprite.aId = aId
+                        child.add(annotationSprite)
+                        annotationSprite.layers.set(1)
+                        annotationMarkers.push(annotationSprite)
+                        // console.log(annotationSprite)
 
-                scene.add( gltf.scene );
+                        // if (myObj.facilities[aId].name) {
+                        const annotationTextDiv = document.createElement('div')
+                        annotationTextDiv.className = 'annotationDescription'
+                        
+                        // Creating HTML
+                        const annotationDiv = document.createElement('div');
+                        annotationDiv.className = 'label';
+                        annotationDiv.textContent = facility.name;
+                        annotationDiv.setAttribute("id", doc.id)
+                        // annotationDiv.innerHTML = aId;
+                        const annotationLabel = new CSS2DObject(annotationDiv);
+                        // annotationLabel.position.set(150, 5, 0);
+                        child.add(annotationLabel);
 
-            // LOADING
-            }, function(loading) {
-            console.log((loading.loaded/loading.total * 100) + "% loaded")
-            },
-            function(error) {
-            console.error( error );
+                        // Adding interaction
+                        annotationDiv.addEventListener('click', showDescription)
 
-            });
-        }
+                        function showDescription() {
 
-        loadMap();
+                            var acc = document.getElementsByClassName("label");
+                            var i;
+                            
+                            for (i = 0; i < acc.length; i++) {
+                            acc[i].addEventListener("click", function() {
+                            
+                            var panel = this.nextElementSibling;
+                            if (panel.style.maxHeight){
+                            //   panel.style.maxHeight = null;
+                            } else {
+                            let active = document.querySelectorAll(".label.active");
+                            for(let j = 0; j < active.length; j++){
+                                active[j].classList.remove("active");
+                                // active[j].nextElementSibling.style.maxHeight = null;
+                            }
+                            this.classList.toggle("active");
+                            //   panel.style.maxHeight = panel.scrollHeight + "px";
+                            }
+                            });
+                            }              
+                        }
+
+                        if (annotationDisplay) {
+                            // annotationDisplay = true;
+
+                            annotationTextDiv.innerHTML +=
+                                '<p>' + facility.description + '</p>'
+                        } 
+
+                        // console.log(annotations[aId]);
+                        annotationDiv.appendChild(annotationTextDiv)
+                        annotations.descriptionDomElement =
+                            annotationTextDiv
+                        }
+
+                    createAnnotation(child);
+
+                    }
+                });
+            }
+        )
+
+            scene.add( gltf.scene );
+
+        // LOADING
+        }, function(loading) {
+        console.log((loading.loaded/loading.total * 100) + "% loaded")
+        },
+        function(error) {
+        console.error( error );
+
+        });
 
       });
   

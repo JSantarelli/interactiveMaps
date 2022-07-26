@@ -132,6 +132,10 @@ canvas {
     outline: none;
     transition: 0.4s;
   }
+
+.removed {
+    display: none!important;
+  }
   
   .active, .label:hover {
     background-color: #00000042;
