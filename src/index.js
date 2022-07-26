@@ -1,8 +1,7 @@
 // ENVIRONMENT.JS --> MODULARIZAR Y ENVIAR A environment.js!
 // Firebase connection
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js"
-  import { getFirestore, collection, addDoc, getDocs, onSnapshot, deleteDoc, updateDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-firestore.js"
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-app.js"
+import { getFirestore, collection, addDoc, getDocs, onSnapshot, deleteDoc, updateDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.2/firebase-firestore.js"
   
     // Your web app's Firebase configuration
     const firebaseConfig = {
@@ -16,7 +15,7 @@
   
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore()
+    const db = getFirestore(app)
   
     export const submitFacility = (name, description) => {
       addDoc(collection(db, "facilities"), {name, description});
@@ -109,19 +108,3 @@ function saveForm() {
 
 const btnForm = document.getElementById('btn-form');
 btnForm.addEventListener( 'click', saveForm )
-
-// ARROW
-// textForm.addEventListener('submit', (e) => {
-//     e.preventDefault()
-
-//     const name = textForm['test-name']
-//     const description = textForm['test-desc']
-
-//     submitFacility(name.value, description.value)
-
-//     textForm.reset()
-// })
-
-
-
-

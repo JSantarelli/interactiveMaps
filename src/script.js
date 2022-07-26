@@ -1,284 +1,276 @@
-import './style.css'
-import * as THREE from 'three'
+import './style.css';
+import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import * as dat from 'dat.gui'
-import { GUI } from 'dat.gui'
-import { Mesh } from 'three'
-import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import * as dat from 'dat.gui';
+import { GUI } from 'dat.gui';
+import { Mesh } from 'three';
+import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import {
     CSS3DRenderer,
     CSS3DObject
-  } from 'three/examples/jsm/renderers/CSS3DRenderer.js'
+  } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, addDoc, getDocs, onSnapshot, deleteDoc, updateDoc, doc, getDoc } from "firebase/firestore";
 
 
 // SETUP
 const canvas = document.querySelector('canvas.webgl')
 const loader = new GLTFLoader();
 
-const myObj = {
-    name: "Parque Municipal de los Deportes",
-    year: 1978,
-    buildings: function() {
-      return stadium.name;
-    },
-    facilities: [
-        { name:"Estadio Mundialista", description: "Inaugurado en 1978, cuenta con una capacidad para 35.500 espectadores", sports:["Fúbol", "Atletismo", "Rugby"], year: 1978, anchor: "Stadium23" },
-        { name:"Estadio Islas Malvinas", description: "Fue inaugurado en 1995 con motivo de la realización de los XV Juegos Panamericanos", sports:["Tenis", "Voley", "Handbol"], year: 1995, anchor: "Shape15" },
-        { name:"Natatorio Zorrilla", description: "Fue inaugurado en 1995 con motivo de la realización de los XV Juegos Panamericanos", sports:["Natación", "Clavadismo", "Waterpolo"], year: 1995, anchor: "Nata202" },
-        { name:"Acceso Natatorio", description: "Capacidad para 20.000 espectadores", sports:["Natación", "Clavadismo", "Waterpolo"], year: 1995, anchor: "Nata203" }
-    ]
-  }
-
-let annotationCounter = 0
-
-// Create empty object and array
-let annotations = {}
-const annotationMarkers = []
-
-const circleTexture = new THREE.TextureLoader().load('img/textWater.jpg')
-
-let annotationDisplay = true;
-
-
-function createAnnotation(child) {
-
-                // Annotation content
-                const aId = (annotationCounter++).toString()
-                annotations[aId] = {
-                    title: myObj.facilities[aId].name,
-                    description: myObj.facilities[aId].description,
-                }
-
-                // Defining sprite properties
-                const annotationSpriteMaterial = new THREE.SpriteMaterial({
-                    map: circleTexture,
-                    depthTest: false,
-                    depthWrite: false,
-                    sizeAttenuation: false,
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyDEslhlteP9FzDmI9ax3p-rwwAMALW6XHA",
+        authDomain: "intermaptive.firebaseapp.com",
+        projectId: "intermaptive",
+        storageBucket: "intermaptive.appspot.com",
+        messagingSenderId: "260919370396",
+        appId: "1:260919370396:web:583746f34afe4ae4f34359"
+      };
+    
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app)
+    
+      export const submitFacility = (name, description, meshName) => {
+        addDoc(collection(db, "facilities"), {name, description, meshName});
+      }
+      
+      export const getFacilities = () => getDocs(collection(db, 'facilities'));
+  
+      export const getFacility = () => getDoc(doc(db, 'facilities', id));
+  
+      export const onGetFacilities = (callback) => onSnapshot(collection(db, 'facilities'), callback);
+  
+      export const deleteFacility = (id) => deleteDoc((doc(db, 'facilities', id)));
+      export const editFacility = (id) => updateDoc((doc(db, 'facilities', id)));
+  
+      export const updateFacility = (id, newFields) => updateDoc(doc(db, 'facilities', id), newFields)
+  
+  // ------------------------------------------------------------------------------------
+  // INDEX.JS
+  // import { submitFacility, onSnapshot, deleteDoc } from './environments/environment.js'
+  
+  const textForm  = document.getElementById('test-form')
+  const faciList = document.getElementById('test-list')
+  let editStatus = false;
+  let id = ''
+  
+  window.addEventListener('DOMContentLoaded', async () => {
+      
+      // const facilities = await getFacilities()
+        
+      onSnapshot(collection(db, 'facilities'), (facilities) => {
+          let html = ''
+  
+          facilities.forEach(doc => {
+              const facility = doc.data();
+              console.log(doc.id)
+  
+              html += `
+                  <li>
+                      <h2>${facility.name}</h2>
+                      <p>${facility.description}</p>
+                      <p>${facility.meshName}</p>
+                      <button class="btn-delete" data-id="${doc.id}">Delete</button>
+                      <button class="btn-edit" data-id="${doc.id}">Edit</button>
+                  </li> 
+              `;
+          });
+      
+          faciList.innerHTML = html
+          const btnsDelete = faciList.querySelectorAll('.btn-delete')
+          const btnsEdit = faciList.querySelectorAll('.btn-edit')
+  
+          btnsDelete.forEach(btn => {
+              btn.addEventListener('click', ({ target: { dataset }}) => {
+                  deleteFacility(dataset.id)
+                  setTimeout(loadMap(), 4000);
                 })
-                const annotationSprite = new THREE.Sprite(
-                    annotationSpriteMaterial
-                )    
-                child.getWorldPosition(annotationSprite.position)
-                annotationSprite.aId = aId
-                child.add(annotationSprite)
-                annotationSprite.layers.set(1)
-                annotationMarkers.push(annotationSprite)
-                // console.log(annotationSprite)
+          })
 
-                // if (myObj.facilities[aId].name) {
-                const annotationTextDiv = document.createElement('div')
-                annotationTextDiv.className = 'annotationDescription'
-                annotationTextDiv.setAttribute("id", aId)
-                
-                // Creating HTML
-                const annotationDiv = document.createElement('div');
-                annotationDiv.className = 'label';
-                annotationDiv.textContent = myObj.facilities[aId].name;
-                // annotationDiv.innerHTML = aId;
-                const annotationLabel = new CSS2DObject(annotationDiv);
-                // annotationLabel.position.set(150, 5, 0);
-                child.add(annotationLabel);
+          btnsEdit.forEach(btn => {
+              btn.addEventListener('click', async (event) => {
+                  const doc = await getFacility(event.target.dataset.id)
+                  const facility = doc.data()
+  
+                  textForm['test-name'].value = facility.name
+                  textForm['test-desc'].value = facility.description
+                  textForm['test-anchor'].value = facility.meshName
+                  
+                  editStatus = true;
+                  id = doc.id;
+  
+                  textForm['btn-form'].innerText = 'update'
+              })
+          })
 
-                // Adding interaction
-                annotationDiv.addEventListener('click', showDescription)
+        //   ANNOTATIONS
+        let annotationCounter = 0
 
-                function showDescription() {
+        // Create empty object and array
+        let annotations = {}
+        const annotationMarkers = []
 
-                    var acc = document.getElementsByClassName("label");
-                    var i;
-                    
-                    for (i = 0; i < acc.length; i++) {
-                    acc[i].addEventListener("click", function() {
-                    
-                    var panel = this.nextElementSibling;
-                    if (panel.style.maxHeight){
-                    //   panel.style.maxHeight = null;
-                    } else {
-                      let active = document.querySelectorAll(".label.active");
-                      for(let j = 0; j < active.length; j++){
-                        active[j].classList.remove("active");
-                        // active[j].nextElementSibling.style.maxHeight = null;
-                      }
-                      this.classList.toggle("active");
-                    //   panel.style.maxHeight = panel.scrollHeight + "px";
-                    }
-                    });
-                    }
+        const circleTexture = new THREE.TextureLoader().load('img/textWater.jpg')
 
-                    // const current = document.getElementById(aId);
-                        
-                    // Conditional toggle
-                    // if (current.style.display === "none") {
-                    //     current.style.display = "block";
-                    //   } else {
-                    //     current.style.display = "none";
-                    // }                
-                }
+        let annotationDisplay = true;
           
-                if (annotationDisplay) {
-                    // annotationDisplay = true;
+        // 3D MODEL
+        function loadMap() {
+            
+            loader.load( "/models/park.gltf", function ( gltf ) {
+                // gltf.scene.scale.set(0.5, 0.5, 0.5); 
 
-                    annotationTextDiv.innerHTML +=
-                        '<p>' + myObj.facilities[aId].description + '</p>'
-                } 
- 
-                // console.log(annotations[aId]);
-                annotationDiv.appendChild(annotationTextDiv)
-                annotations[aId].descriptionDomElement =
-                    annotationTextDiv
+            // Getting an individual mesh from 3D Object
+                gltf.scene.traverse(function (child) {
+                    // Code to attach annotations to specific model parts...
+                    const mesh = (child).clone();
+                    let i;
+                    
+                    // Iteration through objects
+                    facilities.forEach(doc => {
+                        const facility = doc.data();
+
+                        if(mesh.name === facility.meshName) {
+
+                            console.log(mesh.name)
+                            console.log(facility.meshName)
+                                    
+                        function createAnnotation(child) {
+
+                            // Annotation content
+                            const aId = (annotationCounter++).toString()
+                            annotations[aId] = {
+                                title: facility.name,
+                                description: facility.description,
+                            }
+                            
+                            // Defining sprite properties
+                            const annotationSpriteMaterial = new THREE.SpriteMaterial({
+                                map: circleTexture,
+                                depthTest: false,
+                                depthWrite: false,
+                                sizeAttenuation: false,
+                            })
+                            const annotationSprite = new THREE.Sprite(
+                                annotationSpriteMaterial
+                            )    
+                            child.getWorldPosition(annotationSprite.position)
+                            annotationSprite.aId = aId
+                            child.add(annotationSprite)
+                            annotationSprite.layers.set(1)
+                            annotationMarkers.push(annotationSprite)
+                            // console.log(annotationSprite)
+
+                            // if (myObj.facilities[aId].name) {
+                            const annotationTextDiv = document.createElement('div')
+                            annotationTextDiv.className = 'annotationDescription'
+                            annotationTextDiv.setAttribute("id", aId)
+                            
+                            // Creating HTML
+                            const annotationDiv = document.createElement('div');
+                            annotationDiv.className = 'label';
+                            annotationDiv.textContent = facility.name;
+                            // annotationDiv.innerHTML = aId;
+                            const annotationLabel = new CSS2DObject(annotationDiv);
+                            // annotationLabel.position.set(150, 5, 0);
+                            child.add(annotationLabel);
+
+                            // Adding interaction
+                            annotationDiv.addEventListener('click', showDescription)
+
+                            function showDescription() {
+
+                                var acc = document.getElementsByClassName("label");
+                                var i;
+                                
+                                for (i = 0; i < acc.length; i++) {
+                                acc[i].addEventListener("click", function() {
+                                
+                                var panel = this.nextElementSibling;
+                                if (panel.style.maxHeight){
+                                //   panel.style.maxHeight = null;
+                                } else {
+                                let active = document.querySelectorAll(".label.active");
+                                for(let j = 0; j < active.length; j++){
+                                    active[j].classList.remove("active");
+                                    // active[j].nextElementSibling.style.maxHeight = null;
+                                }
+                                this.classList.toggle("active");
+                                //   panel.style.maxHeight = panel.scrollHeight + "px";
+                                }
+                                });
+                                }              
+                            }
+
+                            if (annotationDisplay) {
+                                // annotationDisplay = true;
+
+                                annotationTextDiv.innerHTML +=
+                                    '<p>' + facility.description + '</p>'
+                            } 
+
+                            // console.log(annotations[aId]);
+                            annotationDiv.appendChild(annotationTextDiv)
+                            annotations.descriptionDomElement =
+                                annotationTextDiv
+                            }
+
+                        createAnnotation(child);
+
+                        }
+                    });
                 }
+            )
+
+                scene.add( gltf.scene );
+
+            // LOADING
+            }, function(loading) {
+            console.log((loading.loaded/loading.total * 100) + "% loaded")
+            },
+            function(error) {
+            console.error( error );
+
+            });
+        }
+
+        loadMap();
+
+      });
+  
+      });
+
+//----------------------------------------------------------------
+
+  function saveForm() {
+  
+      const fName = textForm['test-name'];
+      const fDescription = textForm['test-desc'];
+      const fAnchor = textForm['test-anchor'];
+  
+      if (!editStatus) {
+          submitFacility(fName.value, fDescription.value, fAnchor.value);
+      } else {
+          updateFacility(id, (
+              (fName.value, fDescription.value, fAnchor.value)));
+          editStatus = false;
+      }
+  
+      textForm.reset()
+  }
+  
+  const btnForm = document.getElementById('btn-form');
+  btnForm.addEventListener( 'click', saveForm )
+
+  // ------------------------------------------------------------------------------------
 
 // SCENE
 const scene = new THREE.Scene()
 scene.background = new THREE.Color(0xffffff)
 
-// 3D MODEL
-loader.load( "/models/park.gltf", function ( gltf ) {
-        // gltf.scene.scale.set(0.5, 0.5, 0.5); 
-
-    // Getting an individual mesh from 3D Object
-        gltf.scene.traverse(function (child) {
-            // Code to attach annotations to specific model parts...
-            const mesh = (child).clone();
-
-            // Iteration through objects
-            let i;
-
-            for (i = 0; i < myObj.facilities.length; i++) {
-
-                if(mesh.name === myObj.facilities[i].anchor) {
-                    createAnnotation(child);
-                }
-            }
-        }
-    )
-        console.log(gltf)
-        // const root = gltf.scene;
-        // scene.add(root)
-    
-        scene.add( gltf.scene );
-    
-    // LOADING
-}, function(loading) {
-    console.log((loading.loaded/loading.total * 100) + "% loaded")
-},
-    function(error) {
-    console.error( error );
-
-} );
-
 // HTML
-// TO-DO: try bring elements using IDs, append, textContent, createNode, createElement  
-
-// for (let i in myObj.facilities) {
-    //     const para = document.createElement("p");
-    //     const node = document.createTextNode(myObj.facilities[i].name);
-    //     node.domElement.style.color = 'blue';
-    //     para.className = 'holder';
-    //     para.appendChild(node);
-    //     const element = document.getElementById("holder");
-    //     element.appendChild(para);
-// }
-
-let i;
-
-function binding() {
-    // Add code block that updates the map!
-}
-
-// Adding facilities
-function addClient() {
-    
-    var newFacility = {
-      name:document.getElementById("facility-name").value,
-      year:document.getElementById("facility-year").value,
-      description:document.getElementById("facility-desc").value,
-      sports:document.getElementById("facility-sports").value,
-      anchor:document.getElementById("facility-anchor").value,
-    }
-    
-    myObj.facilities.push(newFacility)
-    displayClients()
-    binding()
-  }
-
-const btn = document.getElementById("btn-save");
-btn.addEventListener('click', addClient)
-
-
-// Displaying current facilities
-function displayClients() {    
-    document.getElementById("list").innerHTML = " "
-
-    for (i = 0; i < myObj.facilities.length; i++) {
-        
-      var myTr = document.createElement("tr")
-      console.log(myTr)
-
-      for(let a in myObj.facilities[i]) {
-        var myTd = document.createElement("td")
-        // myTd.className = "floating"
-        myTd.innerHTML = myObj.facilities[i][a]
-        myTr.appendChild(myTd)
-        console.log(myTd)
-      }
-      
-        var myTd = document.createElement("td")
-        myTd.innerHTML = myObj.facilities[i].name
-        myTr.appendChild(myTd)
-
-        var actionTd = document.createElement("td")
-        var editBtn = document.createElement("button")
-        editBtn.textContent = "Edit"
-        editBtn.setAttribute("class" , "btn btn-sm btn-primary")
-        editBtn.setAttribute("onclick" , "editClient(" + i + ")")
-
-        var deletebtn = document.createElement("button")
-        deletebtn.innerHTML="Delete"
-        deletebtn.setAttribute("class" , "btn btn-sm btn-danger")
-        deletebtn.setAttribute("onclick" , "deleteClient(" + i + ")")
-
-        actionTd.appendChild(editBtn)
-        actionTd.appendChild(deletebtn)
-        myTr.appendChild(actionTd)
-        document.getElementById("list").appendChild(myTr)
-      }
-    
-      document.getElementById("facility-name").value = " ";
-      document.getElementById("facility-year").value = " ";
-      document.getElementById("facility-desc").value = " ";
-      document.getElementById("facility-sports").value = " ";
-      document.getElementById("facility-anchor").value = " "
-      
-    }
-
-  displayClients()
-
-
-// CreateNode method
-function createNode(element) {
-    return document.createElement(element);
-}
-
-function append(parent, el) {
-  return parent.appendChild(el);
-}
-
-const ul = document.getElementById('holder');
-
-// for (let i in myObj.facilities) {
-    // Creating a table
-//     let li = createNode('li');
-//     let img = createNode('img');
-//     let span = createNode('span');
-//     li.innerHTML = myObj.facilities[i].name;
-//     li.className = 'holder';
-//     append(li, img);
-//     append(li, span);
-//     append(ul, li);
-// }
 
 // Renderer for 2D labels
 let labelRenderer = new CSS2DRenderer();
@@ -305,7 +297,6 @@ function makeInstance(geometry, color, x, name) {
     elem.textContent = name;
     labelContainerElem.appendChild(elem);
 
-
     return {form, elem};
 }
 
@@ -314,16 +305,12 @@ const cubes = [
     makeInstance(geometry, 0x44aa88,  0, 'Cube'),
 ];
 
-
 // MATERIALS
 const material2 = new THREE.MeshLambertMaterial({color: 0xfff000});
 
-
 // Texturing
 
-
 // MESH
-
 
 // LIGHTS
 const pointLight1 = new THREE.PointLight(0xffffff, 2)
@@ -394,7 +381,6 @@ function onMouseMove(event) {
         
         this.tl = new TimelineMax().delay(.3);
     }
-
 }
 
 window.addEventListener('click', onMouseMove);
@@ -429,7 +415,6 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 /**
  * ANIMATIONS
  */
-
 
 // based on a function
 var render = function() {
