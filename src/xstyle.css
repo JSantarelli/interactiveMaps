@@ -1,0 +1,143 @@
+*
+{
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body
+{
+    height: 100vh;
+    font-family: 'Poppins';
+}
+/* #c {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  #container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  } */
+
+section#labels {
+    position: absolute;
+    left: 0;
+    top: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 500px;
+    z-index: 999;
+}
+
+h2 {
+    /* position: absolute; */
+    z-index: 999;
+    color: purple;
+}
+
+h3 {
+    position: absolute;
+    z-index: 999;
+    color: white;
+    left: 25vw;
+    top: 25vh;
+}
+
+canvas {
+    display: block;
+}
+
+.webgl
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    outline: none;
+}
+
+/* .label {
+    display: block!important;
+    z-index: 999;
+    font-family: sans-serif;
+    padding: .5rem;
+    background: rgba( 0, 0, 0, .6 );
+    width: 200px;
+    height: auto;
+    cursor: pointer;
+}
+
+.label:first-child {
+    font-size: .75rem;
+    color: yellow;
+    font-weight: bolder;
+} */
+
+.annotationDescription {
+    display: none;
+    font-size: .5rem;
+    color: white;
+}
+
+
+.label.active >  .annotationDescription {
+    display: block;
+  } 
+
+/* .panel {
+    display: none;
+    z-index: 1;
+    padding: 0 18px;
+    background-color: white;
+    max-height: 0;
+    overflow: hidden;
+    transition: display 0.2s ease-out;
+  } */
+
+  .holder {
+    color: black;
+    position: relative;
+    top: 200px;
+    left: 200px;
+  }
+
+  .floating {
+    z-index: 999;
+    position: absolute;
+    top: 100px;
+    left: 50px;
+  }
+
+  .absolute {
+    z-index: 999;
+    position: absolute;
+    top: 200px;
+    left: 50px;
+  }
+
+
+/* Accordion logic */
+  .label {
+    color: #fff;
+    background-color: #00000042;
+    cursor: pointer;
+    padding: 10px 10px;
+    margin-top:20px;
+    width:  min-content;
+    border: 1px solid #00000042;
+    text-align: left;
+    outline: none;
+    transition: 0.4s;
+  }
+
+.removed {
+    display: none!important;
+  }
+  
+  .active, .label:hover {
+    background-color: #00000042;
+    border: 1px solid #fc8e2d;
+  }

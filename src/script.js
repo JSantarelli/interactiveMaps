@@ -67,13 +67,23 @@ const loader = new GLTFLoader();
               const facility = doc.data();
   
               html += `
-                  <li>
-                      <h2>${facility.name}</h2>
-                      <p>${facility.description}</p>
-                      <p>${facility.meshName}</p>
-                      <button class="btn-delete" data-id="${doc.id}">Delete</button>
-                      <button class="btn-edit" data-id="${doc.id}">Edit</button>
-                  </li> 
+                <div class="item">
+                  <div class="item__container" left>
+                      <i class="item__icon item__icon--24 icon icon--magenta fa-solid fa-tennis-ball"></i>
+                      <span class="icon-container icon-container--vertical">
+                          <h4 class="item__title">
+                            ${facility.name}
+                          </h4>
+                          <small class="item__subtitle">
+                            ${facility.description}
+                          </small>
+                      </span>
+                  </div>
+                  <div class="item__botonera">
+                      <span class="badge badge--outline">${facility.meshName}</span>
+                      <button class="btn-delete btn btn--rounded btn--colorSecundario" data-id="${doc.id}">Delete</button>
+                      <button class="btn-edit btn btn--rounded btn--colorPrimario" data-id="${doc.id}">Edit</button>                  </div>
+                </div>
               `;
           });
       
@@ -85,21 +95,18 @@ const loader = new GLTFLoader();
               btn.addEventListener('click', ({ target: { dataset }}) => {
                   deleteFacility(dataset.id)
                   console.log(dataset.id)
-
-                // REVIEW CAUSE IT'S DUPLICATING DOM ELEMENTS
+                  
+                  // REVIEW CAUSE IT'S DUPLICATING DOM ELEMENTS
                   facilities.forEach(doc => {
                       const removedItem = document.getElementById(doc.id);
                       if(dataset.id === doc.id) {
                           console.log('removed!')
-                          console.log(removedItem)
+                        //   console.log(removedItem)
                         //   removedItem.remove();
                         //   removedItem.style.display = "none";
                           removedItem.classList.add('removed')
                     }
                   })
-
-                // check if item exists
-                // if not exists, then remove from DOM
                 })
           })
 
@@ -177,11 +184,11 @@ const loader = new GLTFLoader();
 
                         // if (myObj.facilities[aId].name) {
                         const annotationTextDiv = document.createElement('div')
-                        annotationTextDiv.className = 'annotationDescription'
+                        annotationTextDiv.className = 'panel__description'
                         
                         // Creating HTML
                         const annotationDiv = document.createElement('div');
-                        annotationDiv.className = 'label';
+                        annotationDiv.className = 'panel panel--white';
                         annotationDiv.textContent = facility.name;
                         annotationDiv.setAttribute("id", doc.id)
                         // annotationDiv.innerHTML = aId;
@@ -194,7 +201,7 @@ const loader = new GLTFLoader();
 
                         function showDescription() {
 
-                            var acc = document.getElementsByClassName("label");
+                            var acc = document.getElementsByClassName("panel");
                             var i;
                             
                             for (i = 0; i < acc.length; i++) {
@@ -204,7 +211,7 @@ const loader = new GLTFLoader();
                             if (panel.style.maxHeight){
                             //   panel.style.maxHeight = null;
                             } else {
-                            let active = document.querySelectorAll(".label.active");
+                            let active = document.querySelectorAll(".panel.active");
                             for(let j = 0; j < active.length; j++){
                                 active[j].classList.remove("active");
                                 // active[j].nextElementSibling.style.maxHeight = null;
@@ -220,7 +227,7 @@ const loader = new GLTFLoader();
                             // annotationDisplay = true;
 
                             annotationTextDiv.innerHTML +=
-                                '<p>' + facility.description + '</p>'
+                                '<p class="panel__texto--gris">' + facility.description + '</p>'
                         } 
 
                         // console.log(annotations[aId]);
@@ -290,29 +297,29 @@ document.body.appendChild( labelRenderer.domElement );
 
 
 // OBJECTS
-const geometry = new THREE.SphereGeometry( .7, 20, 20, );
+// const geometry = new THREE.SphereGeometry( .7, 20, 20, );
 
-const labelContainerElem = document.querySelector('#labels');
+// const labelContainerElem = document.querySelector('#labels');
 
-function makeInstance(geometry, color, x, name) {
-    const material = new THREE.MeshPhongMaterial({color});
+// function makeInstance(geometry, color, x, name) {
+//     const material = new THREE.MeshPhongMaterial({color});
 
-    const form = new THREE.Mesh(geometry, material);
-    scene.add(form);
+//     const form = new THREE.Mesh(geometry, material);
+//     scene.add(form);
 
-    form.position.x = x;
+//     form.position.x = x;
 
-    const elem = document.createElement('h2');
-    elem.textContent = name;
-    labelContainerElem.appendChild(elem);
+//     const elem = document.createElement('h2');
+//     elem.textContent = name;
+//     labelContainerElem.appendChild(elem);
 
-    return {form, elem};
-}
+//     return {form, elem};
+// }
 
 // Prototypes
-const cubes = [
-    makeInstance(geometry, 0x44aa88,  0, 'Cube'),
-];
+// const cubes = [
+//     makeInstance(geometry, 0x44aa88,  0, 'Cube'),
+// ];
 
 // MATERIALS
 const material2 = new THREE.MeshLambertMaterial({color: 0xfff000});

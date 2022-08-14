@@ -4,85 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ThreeJS Starter</title>
+    
+         <!-- CRASH COURSE: https://www.youtube.com/watch?v=6oFvqLfRnsU&t=1922s&ab_channel=DesignCourse -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
+        <!-- FIREBASE/JS: https://www.youtube.com/watch?v=ey4k6mW9ds4 -->
+        <!-- <script type="module" src="index.js"></script> -->
+        <!-- <script src="environments/environment.js"></script> -->
+        <script src="script.js"></script>
+        <script src="./assets/js/interactions.js"></script>
+        <!-- Icons: create a npm package -->
+        <script src="https://kit.fontawesome.com/cce30956be.js" crossorigin="anonymous"></script>
 </head>
-<body>
-    <canvas class="webgl"></canvas>
-    <h3 id="demo"></h3>
-     <!-- CRASH COURSE: https://www.youtube.com/watch?v=6oFvqLfRnsU&t=1922s&ab_channel=DesignCourse -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
-    <!-- FIREBASE/JS: https://www.youtube.com/watch?v=ey4k6mW9ds4 -->
-    <!-- <script type="module" src="index.js"></script> -->
-    <!-- <script src="environments/environment.js"></script> -->
-    <script src="script.js"></script>
+<body onload="initial()" class="layout--flex">
+  <!-- <h3 id="demo"></h3> -->
 
+  <section id="bienvenida">
+    <section id="primerScroll">
+      <!-- 3D Model -->
+      <canvas class="webgl"></canvas>
+    </section>
+  </section>
 
-<!-- Example form -->
-<form id="test-form" class="floating">
+  <aside id="ingreso" class="panel">
+      <!-- boton flotante ingreso/registro -->
+      <button id="btnSidepanel" onclick="expandSidepanel()" class="btn btn__flotante--der btn--colorPrimario">
+        <label for="">
+            ingresar
+        </label>
+        <i class=""></i>
+    </button>
 
-  <label for="test-name"></label>
-  <input type="text" id="test-name" name="test-name" placeholder="name">
+    <div class="tabSet">
+        <nav role="tablist" class="nav__tabs flex flex--center nav__tabs">
+            <button id="defaultOpen" role="tab" class="nav__tab" onclick="showTab(event, 'basic')">
+                <p>List of facilities</p>
+            </button>
+            <button role="tab" class="nav__tab" onclick="showTab(event, 'list')">
+                <p>Add/Edit facility</p>
+            </button>
+      </nav>
+      <div class="tab-panels">
+        <section id="basic" class="tab-panel">
 
-  <label for="test-anchor"></label>
-  <input type="text" id="test-anchor" name="test-anchor" placeholder="anchor">
-
-  <label for="test-desc"></label>
-  <textarea type="text" id="test-desc" name="test-desc" placeholder="name"></textarea>
-
-  <button type="submit" id="btn-form">push!</button>
-</form>
-<ul id="test-list" class="floating"> 
-
-</ul>
-
-
-    <form id="facility-form">
-      <fieldset>
-        <!-- Form Name -->
-        <legend>Facility</legend>
-        <!-- Text input-->
-          <label for="facility-name">Name</label>  
-            <input id="facility-name" name="facility-name" type="text" placeholder="Facility name">
-        <!-- Prepended text-->
-          <label for="facility-year">Year</label>
-              <span></span>
-              <input id="facility-year" name="facility-year" placeholder="XXXX" type="text">
-        <!-- Text input-->
-          <label for="facility-desc">Description</label>  
-            <input id="facility-desc" name="facility-desc" type="text" placeholder="Facility description">
-        <!-- Prepended text-->
-          <label for="facility-sports">Sports</label>
-              <span></span>
-              <input id="facility-sports" name="facility-sports" placeholder="XXXX" type="text">
-        <!-- Text input-->
-          <label for="facility-anchor">Anchor</label>  
-            <input id="facility-anchor" name="facility-anchor" type="text" placeholder="Facility name">
-      </fieldset>
-      <label for="btn-save"></label>
-      <div id="saveupdate">
-        <button id="btn-save" name="btn-save">Save</button>
-      </div>
-    </form>
-    <table class="absolute">
-        <thead>
-          <tr>
-            <td>Name</td>
-            <th>Description</th>
-            <th>Sports</th>
-            <th>Year</th>
-            <th>Anchor</th>
-            <th></th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="list">
-
-        </tbody>
-      </table>
-    <div id="container">
-        <ul id="holder"></ul>
-        <section id="labels"></section>
+          <!-- Example form -->
+          <form id="test-form" class="form">
+            <div class="input__container input__container--between">
+              <label for="test-name"></label>
+              <input class="input input--rounded" type="text" id="test-name" name="test-name" placeholder="name">
+          
+              <label for="test-anchor"></label>
+              <input class="input input--rounded" type="text" id="test-anchor" name="test-anchor" placeholder="anchor">
+          
+              <label for="test-desc"></label>
+              <textarea class="input input--rounded" type="text" id="test-desc" name="test-desc" placeholder="name"></textarea>
+          
+              <button class="btn btn--rounded btn--colorSecundario btn--w100" type="submit" id="btn-form">push!</button>
+            </div>
+          </form>
+        </section>
+        <section id="list" class="tab-panel">
+            <div id="test-list" class="floating">
+              
+            </div>
+        </section>
+     
+        </div>
     </div>
+
+  
+      <div id="container">
+          <ul id="holder"></ul>
+          <section id="labels"></section>
+      </div>
+
+  </aside>
 
 </body>
 </html>
