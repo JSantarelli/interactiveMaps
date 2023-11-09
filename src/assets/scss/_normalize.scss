@@ -121,6 +121,7 @@ samp {
 
 small {
 	font-size: 80%;
+	font-weight: lighter;
 }
 
 /**
@@ -374,4 +375,8 @@ a, ul, li {
 			color: $azul-oscuro;
 			}
 	}
+}
+
+p, small {
+	margin: 0;
 }

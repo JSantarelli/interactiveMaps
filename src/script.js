@@ -1,4 +1,5 @@
 import './style.css';
+import './assets/scss/sports.css';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -32,8 +33,8 @@ const loader = new GLTFLoader();
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app)
     
-      export const submitFacility = (name, description, meshName) => {
-        addDoc(collection(db, "facilities"), {name, description, meshName});
+      export const submitFacility = (name, description, meshName, status, sport, color) => {
+        addDoc(collection(db, "facilities"), {name, description, meshName,  status, sport, color});
       }
       
       export const getFacilities = () => getDocs(collection(db, 'facilities'));
@@ -69,20 +70,25 @@ const loader = new GLTFLoader();
               html += `
                 <div class="item">
                   <div class="item__container" left>
-                      <i class="item__icon item__icon--24 icon icon--magenta fa-solid fa-tennis-ball"></i>
-                      <span class="icon-container icon-container--vertical">
+                      <i class="item__icon item__icon--24 sport sport--magenta fa-solid fa-tennis-ball"></i>
+                      <span class="sport-container sport-container--vertical">
                           <h4 class="item__title">
                             ${facility.name}
                           </h4>
                           <small class="item__subtitle">
                             ${facility.description}
+                            ${facility.sport}
+                            ${facility.color}
+                            ${facility.status}
                           </small>
                       </span>
                   </div>
                   <div class="item__botonera">
                       <span class="badge badge--outline">${facility.meshName}</span>
+                      <span class="badge badge--outline icon-${facility.sport}"></span>
                       <button class="btn-delete btn btn--rounded btn--colorSecundario" data-id="${doc.id}">Delete</button>
-                      <button class="btn-edit btn btn--rounded btn--colorPrimario" data-id="${doc.id}">Edit</button>                  </div>
+                      <button class="btn-edit btn btn--rounded btn--colorPrimario" data-id="${doc.id}">Edit</button>
+                    </div>
                 </div>
               `;
           });
@@ -96,10 +102,10 @@ const loader = new GLTFLoader();
                   deleteFacility(dataset.id)
                   console.log(dataset.id)
                   
-                  // REVIEW CAUSE IT'S DUPLICATING DOM ELEMENTS
+                  // REVIEW CAUSE IT'S DUPLICATING DOM ELEMENTS | Tutorial: https://sbcode.net/threejs/glasses/#description
                   facilities.forEach(doc => {
                       const removedItem = document.getElementById(doc.id);
-                      if(dataset.id === doc.id) {
+                      if(dataset.id === doc.id) {   
                           console.log('removed!')
                         //   console.log(removedItem)
                         //   removedItem.remove();
@@ -115,9 +121,12 @@ const loader = new GLTFLoader();
                   const doc = await getFacility(event.target.dataset.id)
                   const facility = doc.data()
   
-                  textForm['test-name'].value = facility.name
-                  textForm['test-desc'].value = facility.description
-                  textForm['test-anchor'].value = facility.meshName
+                  textForm['test-name'].value = facility.name;
+                  textForm['test-desc'].value = facility.description;
+                  textForm['test-anchor'].value = facility.meshName;
+                  textForm['test-status'].value = facility.status;
+                  textForm['test-sport'].value = facility.sport;
+                  textForm['test-color'].value = facility.color;
                   
                   editStatus = true;
                   id = doc.id;
@@ -141,6 +150,11 @@ const loader = new GLTFLoader();
         loader.load( "/models/park.gltf", function ( gltf ) {
             // gltf.scene.scale.set(0.5, 0.5, 0.5); 
 
+            // Get specific object from gltf
+            var stadium = gltf.scene.getObjectByName('Stadium23')
+            console.log(stadium)
+
+
         // Getting an individual mesh from 3D Object
             gltf.scene.traverse(function (child) {
                 // Code to attach annotations to specific model parts...
@@ -155,7 +169,13 @@ const loader = new GLTFLoader();
                         console.log(mesh.name)
                         console.log(facility.meshName)
                         console.log(doc.id)
+
+                    function changeColor(child) {
+                        console.log(mesh)
+                    }
                                 
+                    changeColor()
+
                     function createAnnotation(child) {
 
                         // Annotation content
@@ -188,8 +208,9 @@ const loader = new GLTFLoader();
                         
                         // Creating HTML
                         const annotationDiv = document.createElement('div');
-                        annotationDiv.className = 'panel panel--white';
-                        annotationDiv.textContent = facility.name;
+                        annotationDiv.className = 'panel flex flex--between';
+                        // annotationDiv.textContent = facility.name;
+                        annotationDiv.innerHTML = `<span class="panel panel--white panel__texto--gris item__icon icon icon-${facility.sport}"></span>`;
                         annotationDiv.setAttribute("id", doc.id)
                         // annotationDiv.innerHTML = aId;
                         const annotationLabel = new CSS2DObject(annotationDiv);
@@ -227,7 +248,9 @@ const loader = new GLTFLoader();
                             // annotationDisplay = true;
 
                             annotationTextDiv.innerHTML +=
-                                '<p class="panel__texto--gris">' + facility.description + '</p>'
+                                `<span class="badge badge--outline">${facility.status}</span>
+                                <p class="panel__texto--blanco">${facility.name}</p>
+                                <small class="panel__texto--blanco">${facility.description}</small>`
                         } 
 
                         // console.log(annotations[aId]);
@@ -265,12 +288,15 @@ const loader = new GLTFLoader();
       const fName = textForm['test-name'];
       const fDescription = textForm['test-desc'];
       const fAnchor = textForm['test-anchor'];
+      const fStatus = textForm['test-status'];
+      const fSport = textForm['test-sport'];
+      const fColor = textForm['test-color'];
   
       if (!editStatus) {
-          submitFacility(fName.value, fDescription.value, fAnchor.value);
+          submitFacility(fName.value, fDescription.value, fAnchor.value, fStatus.value, fSport.value, fColor.value);
       } else {
           updateFacility(id, (
-              (fName.value, fDescription.value, fAnchor.value)));
+              (fName.value, fDescription.value, fAnchor.value, fStatus.value, fSport.value, fColor.value)));
           editStatus = false;
       }
   

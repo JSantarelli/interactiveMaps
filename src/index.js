@@ -36,8 +36,8 @@ import { getFirestore, collection, addDoc, getDocs, onSnapshot, deleteDoc, updat
 // INDEX.JS
 // import { submitFacility, onSnapshot, deleteDoc } from './environments/environment.js'
 
-const textForm  = document.getElementById('test-form')
-const faciList = document.getElementById('test-list')
+const textForm  = document.getElementById('test-form');
+const faciList = document.getElementById('test-list');
 let editStatus = false;
 let id = ''
 
@@ -56,6 +56,9 @@ window.addEventListener('DOMContentLoaded', async () => {
                 <li>
                     <h2>${facility.name}</h2>
                     <p>${facility.description}</p>
+                    <p>${facility.status}</p>
+                    <p>${facility.sport}</p>
+                    <p>${facility.color}</p>
                     <button class="btn-delete" data-id="${doc.id}">Delete</button>
                     <button class="btn-edit" data-id="${doc.id}">Edit</button>
                 </li> 
@@ -77,8 +80,11 @@ window.addEventListener('DOMContentLoaded', async () => {
                 const doc = await getFacility(event.target.dataset.id)
                 const facility = doc.data()
 
-                textForm['test-name'].value = facility.name
-                textForm['test-desc'].value = facility.description
+                textForm['test-name'].value = facility.name;
+                textForm['test-desc'].value = facility.description;
+                textForm['test-status'].value = facility.status;
+                textForm['test-sport'].value = facility.sport;
+                textForm['test-color'].value = facility.color
                 
                 editStatus = true;
                 id = doc.id;
@@ -94,12 +100,15 @@ function saveForm() {
 
     const fName = textForm['test-name'];
     const fDescription = textForm['test-desc'];
+    const fStatus = textForm['test-status'];
+    const fSport = textForm['test-sport'];
+    const fColor = textForm['test-color']
 
     if (!editStatus) {
-        submitFacility(fName.value, fDescription.value);
+        submitFacility(fName.value, fDescription.value, fStatus.value, fSport.value, fColor.value);
     } else {
         updateFacility(id, (
-            (fName.value, fDescription.value)));
+            (fName.value, fDescription.value, fStatus.value, fSport.value, fColor.value)));
         editStatus = false;
     }
 

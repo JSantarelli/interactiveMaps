@@ -102,7 +102,7 @@ ul {
 }
 
 .item__icon {
-    font-size: 48px;
+    // font-size: 48px;
     margin-right: .5rem;
 }
 
@@ -209,13 +209,13 @@ header {
 
 // Panel
 .panel {
-    --colorTerciario: #cb0053;
+    --colorTerciario: #00b9b1;
     --headerHeight: fit-content;
     
     display: flex;
     position: relative;
-    opacity: .85;
-    padding: 1.5rem;
+    // opacity: .85;
+    // padding: 1.5rem;
     
     %basePanel {
         text-align: center;
@@ -230,7 +230,10 @@ header {
     }
 
     &.active > .panel__description {
-        display: block;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 60px;
     }
 
     // modificadores cromaticos
@@ -694,10 +697,10 @@ form {
     // el color será dinámico en función de reglas .js
     --colorEstado: #00b9b1;
 
-	align-self: center;
-	border-radius: 25px;
+	align-self: start;
+	border-radius: 15px;
 	color: white;
-	font-size: 0.75rem;
+	font-size: 0.65rem;
 	font-weight: 500;
 	text-transform: uppercase;
 	padding: 0.25rem 0.25rem;
@@ -777,13 +780,30 @@ form {
 	}
 }
 
-[class*="icon-i"] {
-    border: solid 1px var(--colorTerciario);
-    padding: .35rem;
-    border-radius: 50%;
-}
+// [class^="icon-"] {
+//     border: solid 3px var(--colorTerciario);
+//     border-radius: 50%;
+//     padding: .35rem;
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center;
+//     width: 25px;
+//     height: 25px;
+// }
 
 .icon {
+    border: solid 3px var(--colorTerciario);
+    border-radius: 50%;
+    padding: .35rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+
     align-self: center;
 
     // Modificadores formales
