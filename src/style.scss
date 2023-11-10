@@ -654,6 +654,15 @@ form {
         box-shadow: none!important;
     }
 
+    select {
+        @include baseInput;
+        text-transform: capitalize;
+        
+        option {
+            text-transform: capitalize;
+        }
+    }
+
     input {
         @extend %base;
         @include baseInput;
@@ -695,7 +704,7 @@ form {
 
 .badge {
     // el color será dinámico en función de reglas .js
-    --colorEstado: #00b9b1;
+    // --colorEstado: #00b9b1;
 
 	align-self: start;
 	border-radius: 15px;
@@ -729,11 +738,7 @@ form {
 	&--celeste {
 		background-color: $celeste;
 	}
-	
-	&--magenta {
-		background-color: $magenta;
-	}
-	
+
 	&--colorTerciario {
 		background-color: $colorTerciario;
 	}
@@ -745,6 +750,19 @@ form {
 	&--colorSecundario {
 		background-color: $colorSecundario;
 	}
+
+    // Status
+    &--habilitado {
+        --colorEstado: #00b9b1;
+    }
+
+    &--deshabilitado {
+        --colorEstado: orange;
+    }
+
+    &--clausurado {
+        --colorEstado: red;
+    }
 }
 
 // Iconos
@@ -793,7 +811,9 @@ form {
 // }
 
 .icon {
-    border: solid 3px var(--colorTerciario);
+    border: solid 3px var(--colorEstado);
+    color: var(--colorEstado);
+    background-color: white;
     border-radius: 50%;
     padding: .35rem;
     display: flex;
@@ -831,6 +851,19 @@ form {
 	&--celeste {
 		-webkit-text-fill-color: $celeste;
 	}
+
+    // Status
+    &--habilitado {
+        --colorEstado: #00b9b1;
+    }
+
+    &--deshabilitado {
+        --colorEstado: orange;
+    }
+
+    &--clausurado {
+        --colorEstado: red;
+    }
 
 	&--baseline {
 		padding-top: 25%;

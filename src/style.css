@@ -1174,6 +1174,19 @@ form label {
   border: 0 !important;
   box-shadow: none !important;
 }
+.input__container select {
+  background-color: #d3f1ff;
+  color: #2c4794;
+  font-style: italic;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  text-transform: capitalize;
+}
+.input__container select option {
+  text-transform: capitalize;
+}
 .input__container input {
   background-color: #d3f1ff;
   color: #2c4794;
@@ -1208,7 +1221,6 @@ form label {
 }
 
 .badge {
-  --colorEstado: #00b9b1;
   align-self: start;
   border-radius: 15px;
   color: white;
@@ -1236,9 +1248,6 @@ form label {
 .badge--celeste {
   background-color: #d3f1ff;
 }
-.badge--magenta {
-  background-color: #e3007e;
-}
 .badge--colorTerciario {
   background-color: #cb0053;
 }
@@ -1247,6 +1256,15 @@ form label {
 }
 .badge--colorSecundario {
   background-color: #00a1df;
+}
+.badge--habilitado {
+  --colorEstado: #00b9b1;
+}
+.badge--deshabilitado {
+  --colorEstado: orange;
+}
+.badge--clausurado {
+  --colorEstado: red;
 }
 
 .icon-container {
@@ -1275,7 +1293,9 @@ form label {
 }
 
 .icon {
-  border: solid 3px var(--colorTerciario);
+  border: solid 3px var(--colorEstado);
+  color: var(--colorEstado);
+  background-color: white;
   border-radius: 50%;
   padding: 0.35rem;
   display: flex;
@@ -1304,6 +1324,15 @@ form label {
 }
 .icon--celeste {
   -webkit-text-fill-color: #d3f1ff;
+}
+.icon--habilitado {
+  --colorEstado: #00b9b1;
+}
+.icon--deshabilitado {
+  --colorEstado: orange;
+}
+.icon--clausurado {
+  --colorEstado: red;
 }
 .icon--baseline {
   padding-top: 25%;

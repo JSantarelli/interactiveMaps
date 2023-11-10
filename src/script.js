@@ -33,8 +33,8 @@ const loader = new GLTFLoader();
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app)
     
-      export const submitFacility = (name, description, meshName, status, sport, color) => {
-        addDoc(collection(db, "facilities"), {name, description, meshName,  status, sport, color});
+      export const submitFacility = (name, description, meshName, status, sport) => {
+        addDoc(collection(db, "facilities"), {name, description, meshName,  status, sport});
       }
       
       export const getFacilities = () => getDocs(collection(db, 'facilities'));
@@ -70,22 +70,20 @@ const loader = new GLTFLoader();
               html += `
                 <div class="item">
                   <div class="item__container" left>
-                      <i class="item__icon item__icon--24 sport sport--magenta fa-solid fa-tennis-ball"></i>
-                      <span class="sport-container sport-container--vertical">
+                      <span>
                           <h4 class="item__title">
                             ${facility.name}
                           </h4>
                           <small class="item__subtitle">
                             ${facility.description}
                             ${facility.sport}
-                            ${facility.color}
                             ${facility.status}
                           </small>
                       </span>
                   </div>
                   <div class="item__botonera">
-                      <span class="badge badge--outline">${facility.meshName}</span>
-                      <span class="badge badge--outline icon-${facility.sport}"></span>
+                      <span class="badge badge--outline badge--${facility.status}">${facility.meshName}</span>
+                      <span class="badge badge--outline icon--${facility.status} icon-${facility.sport}"></span>
                       <button class="btn-delete btn btn--rounded btn--colorSecundario" data-id="${doc.id}">Delete</button>
                       <button class="btn-edit btn btn--rounded btn--colorPrimario" data-id="${doc.id}">Edit</button>
                     </div>
@@ -124,9 +122,9 @@ const loader = new GLTFLoader();
                   textForm['test-name'].value = facility.name;
                   textForm['test-desc'].value = facility.description;
                   textForm['test-anchor'].value = facility.meshName;
-                  textForm['test-status'].value = facility.status;
+                //   textForm['test-status'].value = facility.status;
+                  textForm['dropStatus'].value = facility.status;
                   textForm['test-sport'].value = facility.sport;
-                  textForm['test-color'].value = facility.color;
                   
                   editStatus = true;
                   id = doc.id;
@@ -210,7 +208,7 @@ const loader = new GLTFLoader();
                         const annotationDiv = document.createElement('div');
                         annotationDiv.className = 'panel flex flex--between';
                         // annotationDiv.textContent = facility.name;
-                        annotationDiv.innerHTML = `<span class="panel panel--white panel__texto--gris item__icon icon icon-${facility.sport}"></span>`;
+                        annotationDiv.innerHTML = `<span class="item__icon icon icon--${facility.status} icon-${facility.sport}"></span>`;
                         annotationDiv.setAttribute("id", doc.id)
                         // annotationDiv.innerHTML = aId;
                         const annotationLabel = new CSS2DObject(annotationDiv);
@@ -248,7 +246,7 @@ const loader = new GLTFLoader();
                             // annotationDisplay = true;
 
                             annotationTextDiv.innerHTML +=
-                                `<span class="badge badge--outline">${facility.status}</span>
+                                `<span class="badge badge--outline badge--${facility.status}">${facility.status}</span>
                                 <p class="panel__texto--blanco">${facility.name}</p>
                                 <small class="panel__texto--blanco">${facility.description}</small>`
                         } 
@@ -282,21 +280,48 @@ const loader = new GLTFLoader();
       });
 
 //----------------------------------------------------------------
+// FORM
+
+// Dropdown
+let status = ['habilitado', 'deshabilitado', 'clausurado'];
+
+let dropdown = document.getElementById('dropStatus') // .text || .index
+dropdown.addEventListener('click', selectStatus)
+
+function selectStatus(i) {
+    let statusValue = dropdown.options[dropdown.selectedIndex]
+    // let countryValue = dropdown.options[dropdown.selectedIndex].countryValue
+    // console.log('Welcome to ' + countries[i])
+    console.log(statusValue.value)
+    }
+    
+function listStatus() {     
+    // let opt = createElement('option')
+    // for (let i = 0; i < countries.length; i++) {
+        for (let i in status) {
+            // Crear un elemento HTML <option> y asignarle los valores del array
+            dropdown.innerHTML += `<option>${status[i]}</option>`
+        }
+    }
+    
+listStatus();
+
+
 
   function saveForm() {
   
       const fName = textForm['test-name'];
       const fDescription = textForm['test-desc'];
       const fAnchor = textForm['test-anchor'];
-      const fStatus = textForm['test-status'];
+    //   const fStatus = textForm['test-status'];
+      const fStatus = textForm['dropStatus'];
       const fSport = textForm['test-sport'];
-      const fColor = textForm['test-color'];
   
       if (!editStatus) {
-          submitFacility(fName.value, fDescription.value, fAnchor.value, fStatus.value, fSport.value, fColor.value);
+          submitFacility(fName.value, fDescription.value, fAnchor.value, fStatus.value, fSport.value);
       } else {
           updateFacility(id, (
-              (fName.value, fDescription.value, fAnchor.value, fStatus.value, fSport.value, fColor.value)));
+              (fName.value, fDescription.value, fAnchor.value, fStatus.value, fSport.value)));
           editStatus = false;
       }
   

@@ -54,6 +54,7 @@
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
 
+
 .icon-arco:before { content: '\e800'; } /* '' */
 .icon-atletismo:before { content: '\e801'; } /* '' */
 .icon-basquet:before { content: '\e802'; } /* '' */
@@ -70,3 +71,17 @@
 .icon-tiro:before { content: '\e80d'; } /* '' */
 .icon-vector:before { content: '\e80e'; } /* '' */
 .icon-voley:before { content: '\e80f'; } /* '' */
+.icon-attention:before { content: '\e810'; } /* '' */
+.icon-attention-circled:before { content: '\e811'; } /* '' */
+.icon-info-circled:before { content: '\e812'; } /* '' */
+.icon-floppy:before { content: '\e813'; } /* '' */
+.icon-coffee:before { content: '\f0f4'; } /* '' */
+.icon-food:before { content: '\f0f5'; } /* '' */
+.icon-female:before { content: '\f182'; } /* '' */
+.icon-male:before { content: '\f183'; } /* '' */
+.icon-taxi:before { content: '\f1ba'; } /* '' */
+.icon-trash:before { content: '\f1f8'; } /* '' */
+.icon-bicycle:before { content: '\f206'; } /* '' */
+.icon-bus:before { content: '\f207'; } /* '' */
+.icon-train:before { content: '\f238'; } /* '' */
+.icon-wheelchair-alt:before { content: '\f29b'; } /* '' */

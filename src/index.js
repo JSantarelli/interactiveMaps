@@ -58,7 +58,6 @@ window.addEventListener('DOMContentLoaded', async () => {
                     <p>${facility.description}</p>
                     <p>${facility.status}</p>
                     <p>${facility.sport}</p>
-                    <p>${facility.color}</p>
                     <button class="btn-delete" data-id="${doc.id}">Delete</button>
                     <button class="btn-edit" data-id="${doc.id}">Edit</button>
                 </li> 
@@ -82,9 +81,8 @@ window.addEventListener('DOMContentLoaded', async () => {
 
                 textForm['test-name'].value = facility.name;
                 textForm['test-desc'].value = facility.description;
-                textForm['test-status'].value = facility.status;
+                textForm['dropStatus'].value = facility.status;
                 textForm['test-sport'].value = facility.sport;
-                textForm['test-color'].value = facility.color
                 
                 editStatus = true;
                 id = doc.id;
@@ -100,15 +98,14 @@ function saveForm() {
 
     const fName = textForm['test-name'];
     const fDescription = textForm['test-desc'];
-    const fStatus = textForm['test-status'];
+    const fStatus = textForm['dropStatus'];
     const fSport = textForm['test-sport'];
-    const fColor = textForm['test-color']
 
     if (!editStatus) {
-        submitFacility(fName.value, fDescription.value, fStatus.value, fSport.value, fColor.value);
+        submitFacility(fName.value, fDescription.value, fStatus.value, fSport.value);
     } else {
         updateFacility(id, (
-            (fName.value, fDescription.value, fStatus.value, fSport.value, fColor.value)));
+            (fName.value, fDescription.value, fStatus.value, fSport.value)));
         editStatus = false;
     }
 
