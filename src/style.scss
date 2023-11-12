@@ -11,7 +11,8 @@
 -------------------------------------*/
 body, main {
     font-family: 'Source Sans Pro', sans-serif;
-    overflow-x: hidden;
+    overflow: hidden;
+
 }
 // Navbar
 .nav {
@@ -548,12 +549,12 @@ button {
         padding: .5rem;
         position: sticky;
         height: 40px;
-        width: 100px;
-        top: 20vh;
-        left: 98vw;
-        transform: translateX(-100px);
+        width: 50px;
+        top: 90vh;
+        left: calc(100vw - var(--sidepanelWidth));
+        transform: translateX(-50px);
         z-index: 1;
-        font-size: .85rem;        
+        font-size: 1.25rem;        
         text-transform: uppercase;
         border-top-left-radius: 25px;
         border-bottom-left-radius: 25px;
@@ -612,9 +613,9 @@ form {
     }
 
     label {
-        font-weight: 900;
+        font-weight: bolder;
         font-size: smaller;
-        text-align: center;
+        text-align: start;
         //margin-top: 1rem;
         margin-bottom: .5rem;
     }
@@ -623,6 +624,7 @@ form {
 .input__container {
     display: flex;
     flex-direction: column;
+    gap: 16px;
     
     &--column {
         flex-direction: column;
@@ -641,9 +643,10 @@ form {
         color: $azul;
         font-style: italic;
         font-weight: 500;
-        padding: .5rem 1rem;
+        padding: .35rem 1rem;
         width: 100%;
         box-sizing: border-box;
+        border-radius: 12px;
     }
 
     textarea {
@@ -657,11 +660,12 @@ form {
     select {
         @include baseInput;
         text-transform: capitalize;
+        border-color: transparent;
         
         option {
             text-transform: capitalize;
         }
-    }
+}
 
     input {
         @extend %base;
@@ -670,7 +674,7 @@ form {
         &.input {
             // --modificadores formales
             &--rounded {
-                border-radius: 50px;
+                border-radius: 12px;
     
                 &-right {
                     border-top-right-radius: 50px;
@@ -707,7 +711,7 @@ form {
     // --colorEstado: #00b9b1;
 
 	align-self: start;
-	border-radius: 15px;
+	border-radius: 12px;
 	color: white;
 	font-size: 0.65rem;
 	font-weight: 500;
@@ -1047,6 +1051,31 @@ form {
 }
 
 // TABS
+
+// Forms tabs
+.tabSet {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: white;
+    padding: 16px;
+    box-shadow: 2px 2px 10px 2px gray;
+    height: 100%;
+    width: 287px;
+    
+    .tab-panels {
+        padding: 16px 0px;
+    }
+
+    .tab-panel {
+      // border-bottom: 2px solid $colorTerciario;
+      label {
+          color: black;
+          opacity: 1;
+      }
+    }
+  }
+
 nav {
     &.nav__tabs {
         display: flex;
@@ -1060,13 +1089,16 @@ nav {
                 align-items: center;
                 justify-content: center;
                 width: fit-content;
-                height: 75px;
+                height: 35px;
                 text-transform: uppercase;
                 font-weight: 400;
-                font-size: 1rem;
-                padding: 0 1rem; 
-                background-color: $colorSecundario;
+                font-size: .75rem;
+                padding: 0 .75rem; 
+                background-color: transparent;
+                border: none;
+                border-bottom: solid 1px gray;
             }
+            @include baseTab;
 
             i.icon {
                 margin-right: .5rem;
@@ -1079,14 +1111,14 @@ nav {
                 &:hover {
                     @include baseTab;
                     cursor: pointer;
-                    background-color: lighten($colorPrimario, 10%);
+                    background-color: lighten($colorSecundario, 10%);
                     color: white;
                 }
             }
 
             &--active {
                 @include baseTab;
-                background-color: $colorPrimario;
+                background-color: $colorSecundario;
                 color: white;
             }
         }

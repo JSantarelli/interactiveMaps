@@ -30,7 +30,7 @@
       <!-- boton flotante ingreso/registro -->
       <button id="btnSidepanel" onclick="expandSidepanel()" class="btn btn__flotante--der btn--colorPrimario">
         <label for="">
-            ingresar
+            +
         </label>
         <i class=""></i>
     </button>
@@ -38,10 +38,10 @@
     <div class="tabSet">
         <nav role="tablist" class="nav__tabs flex flex--center nav__tabs">
             <button id="defaultOpen" role="tab" class="nav__tab" onclick="showTab(event, 'basic')">
-                <p>List of facilities</p>
+                <p>Add/Edit facility</p>
             </button>
             <button role="tab" class="nav__tab" onclick="showTab(event, 'list')">
-                <p>Add/Edit facility</p>
+                <p>List of facilities</p>
             </button>
       </nav>
       <div class="tab-panels">
@@ -50,27 +50,29 @@
           <!-- form -->
           <form id="test-form" class="form">
             <div class="input__container input__container--between">
-              <label for="test-name"></label>
-              <input class="input input--rounded" type="text" id="test-name" name="test-name" placeholder="name">
-          
-              <label for="test-sport"></label>
-              <input class="input input--rounded" type="text" id="test-sport" name="test-sport" placeholder="sport">
-<!--           
-              <label for="test-status"></label>
-              <input class="input input--rounded" type="text" id="test-status" name="test-status" placeholder="status"> -->
-
-              <label for="dropStatus">Status</label>
-              <select name="dropStatus" class="selectTypes" id="dropStatus" onchange="selectStatus(i)">
-                <option id="0">Select a status</option>
-              </select>
-              
-              <label for="test-anchor"></label>
-              <input class="input input--rounded" type="text" id="test-anchor" name="test-anchor" placeholder="anchor">
-          
-              <label for="test-desc"></label>
-              <textarea class="input input--rounded" type="text" id="test-desc" name="test-desc" placeholder="Description"></textarea>
-          
-              <button class="btn btn--rounded btn--colorSecundario btn--w100" type="submit" id="btn-form">push!</button>
+              <span>
+                <label for="test-name">Name</label>
+                <input class="input input--rounded" type="text" id="test-name" name="test-name" placeholder="name">
+              </span>
+              <span>
+                <label for="test-anchor">Key word</label>
+                <input class="input input--rounded" type="text" id="test-anchor" name="test-anchor" placeholder="anchor">
+              </span>
+              <span>
+                <label for="test-sport">Main sport</label>
+                <input class="input input--rounded" type="text" id="test-sport" name="test-sport" placeholder="sport">
+              </span>
+              <span>
+                <label for="dropStatus">Status</label>
+                <select name="dropStatus" class="input input--rounded" id="dropStatus" onchange="selectStatus(i)">
+                  <option id="0">Select a status</option>
+                </select>
+              </span>
+              <span>
+                <label for="test-desc">Description</label>
+                <textarea class="input input--rounded" type="text" id="test-desc" name="test-desc" placeholder="Description"></textarea>
+              </span>
+              <button class="btn btn--rounded btn--colorSecundario btn--w100" type="submit" id="btn-form">Save facility</button>
             </div>
           </form>
         </section>
@@ -82,7 +84,6 @@
      
         </div>
     </div>
-
   
       <div id="container">
           <ul id="holder"></ul>

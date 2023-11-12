@@ -70,22 +70,19 @@ const loader = new GLTFLoader();
               html += `
                 <div class="item">
                   <div class="item__container" left>
-                      <span>
-                          <h4 class="item__title">
-                            ${facility.name}
-                          </h4>
-                          <small class="item__subtitle">
-                            ${facility.description}
-                            ${facility.sport}
-                            ${facility.status}
-                          </small>
-                      </span>
+                    <span class="item__icon icon icon--${facility.status} icon-${facility.sport}"></span>
+                    <span>
+                        <h4 class="item__title">
+                        ${facility.name}
+                        </h4>
+                        <small class="item__subtitle">
+                        ${facility.description}
+                        </small>
+                    </span>
                   </div>
                   <div class="item__botonera">
-                      <span class="badge badge--outline badge--${facility.status}">${facility.meshName}</span>
-                      <span class="badge badge--outline icon--${facility.status} icon-${facility.sport}"></span>
-                      <button class="btn-delete btn btn--rounded btn--colorSecundario" data-id="${doc.id}">Delete</button>
-                      <button class="btn-edit btn btn--rounded btn--colorPrimario" data-id="${doc.id}">Edit</button>
+                        <span class="badge badge--outline badge--${facility.status}">${facility.status}</span>
+                        <button class="btn btn--rounded btn--colorTerciario icon-trash data-id="${doc.id}"></button>
                     </div>
                 </div>
               `;
