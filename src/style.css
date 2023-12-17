@@ -884,7 +884,12 @@ header.header--flotante {
   flex-direction: column;
   justify-content: space-between;
 }
-.panel.flex--between.active > .icon {
+.panel.flex--between.active > span.icon:hover {
+  filter: contrast(1);
+}
+.panel.flex--between.active span:nth-child(2) {
+  top: 5px;
+  left: 40px;
   opacity: 1;
 }
 .panel.panel--white {
@@ -1140,16 +1145,17 @@ button.btn__flotante--izq {
   z-index: 1;
 }
 button.btn__flotante--inf {
-  padding: 0.5rem;
+  padding: 0.5rem 0.25rem;
   position: absolute;
-  top: 90vh;
+  top: calc(100vh - 100px);
   left: 200px;
-  height: 40px;
-  width: 50px;
+  height: 100px;
+  width: 150px;
   font-size: 1.25rem;
   text-transform: uppercase;
   border-top-right-radius: 50%;
-  border-bottom-right-radius: 50%;
+  border-top-left-radius: 50%;
+  z-index: 1;
 }
 
 form {
@@ -1371,7 +1377,7 @@ form label {
   color: var(--colorEstado);
 }
 .icon:hover {
-  filter: contrast(125%);
+  filter: contrast(135%);
 }
 .icon--24 {
   font-size: 24px;

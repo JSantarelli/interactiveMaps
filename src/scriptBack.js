@@ -562,7 +562,7 @@ const tick = () =>
 tick()
 
 // EDIT
-function editar(id, fName, fDescription, fStatus, fSport) {
+function editar(id, fName, fDescription, fType, fStatus, fSport) {
     console.log('hola!')
     document.getElementById('test-name').value = fName;
     document.getElementById('test-des').value = fDescription;
@@ -573,7 +573,7 @@ function editar(id, fName, fDescription, fStatus, fSport) {
     var boton = document.getElementById('btn-form');
 
     boton.innerHTML = 'Save updates';
-    boton.onclick = function() {
+    boton.onclick = function saveForm() {
 
     var parkFacilities = db.collection("facilities").doc(id);
 
