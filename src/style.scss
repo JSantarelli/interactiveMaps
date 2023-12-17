@@ -98,7 +98,16 @@ ul {
         align-self: center;
         max-width: 50%;
         margin-right: .5rem;
-        overflow: hidden;
+
+        span:nth-child(2) {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .icon {
+            opacity: 1;
+            cursor: initial;
+        }
     }
 }
 
@@ -137,6 +146,10 @@ ul {
 .item__subtitle {
     font-weight: 200;
     color: $gris;
+    max-width: 55%;
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis; 
 }
 
 .item__botonera {
@@ -215,8 +228,6 @@ header {
     
     display: flex;
     position: relative;
-    // opacity: .85;
-    // padding: 1.5rem;
     
     %basePanel {
         text-align: center;
@@ -230,13 +241,25 @@ header {
         display: none;
     }
 
-    &.active > .panel__description {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 60px;
-    }
+    &.flex--between.active {
+        background: rgba(0, 0, 0, .5);
+        padding: 0.75rem 1rem;
+        min-width: 180px;
+        // width: min-content;
+        max-width: 320px;
+        height: fit-content;
 
+       & > .panel__description {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        > .icon {
+            opacity: 1;
+        }
+    }
+    
     // modificadores cromaticos
     &.panel--white {
         --colorPanel: white;
@@ -562,25 +585,29 @@ button {
 
     &.btn__flotante--izq {
         padding: .5rem;
-        position: sticky;
+        position: absolute;
+        top: 90vh;
+        left: 0;
         height: 40px;
-        top: 10vh;
-        left: 100%;
-        z-index: 1;        
-        border-top-right-radius: 25px;
-        border-bottom-right-radius: 25px;
+        width: 90px;
+        font-size: .75rem;
+        text-transform: uppercase;
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+        z-index: 1;
     }
 
     &.btn__flotante--inf {
+        padding: .5rem;
         position: absolute;
-        top: calc(100vh - 200px);
-        left: calc(50% - 100px);
-        height: 200px;
-        width: 200px;
-        font-size: 1rem;
+        top: 90vh;
+        left: 200px;
+        height: 40px;
+        width: 50px;
+        font-size: 1.25rem;
         text-transform: uppercase;
-        border-top-left-radius: 50%;
         border-top-right-radius: 50%;
+        border-bottom-right-radius: 50%;
     }
 }
 
@@ -772,6 +799,7 @@ form {
 // Iconos
 .icon-container {
 	display: flex;
+    position: relative;
 
     &[center] {
         text-align: center;
@@ -802,17 +830,21 @@ form {
 	}
 }
 
-// [class^="icon-"] {
-//     border: solid 3px var(--colorTerciario);
-//     border-radius: 50%;
-//     padding: .35rem;
-//     display: flex;
-//     flex-direction: column;
-//     align-items: center;
-//     justify-content: center;
-//     width: 25px;
-//     height: 25px;
-// }
+%baseNotification {
+    position: absolute;
+    background: white;
+    z-index: 1;
+    left: 25px;
+    top: -5px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    font-size: .85rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
 
 .icon {
     border: solid 3px var(--colorEstado);
@@ -823,12 +855,29 @@ form {
     display: flex;
     flex-direction: column;
     align-items: center;
+    align-self: start;
     justify-content: center;
     width: 25px;
     height: 25px;
     cursor: pointer;
 
-    align-self: center;
+    ~ .notification__deshabilitado--true {
+        --colorEstado: orange;
+        @extend %baseNotification;
+        border: solid var(--colorEstado) 2px;
+        color: var(--colorEstado);
+    }
+    
+    ~ .notification__clausurado--true {
+        --colorEstado: red;
+        @extend %baseNotification;
+        border: solid var(--colorEstado) 2px;
+        color: var(--colorEstado);
+    }
+
+    &:hover {
+        filter: contrast(125%);
+    }
 
     // Modificadores formales
 	&--24 {
@@ -856,17 +905,26 @@ form {
 		-webkit-text-fill-color: $celeste;
 	}
 
+    // Types
+    &--actividad {
+        --colorEstado: lightsteelblue;
+    }
+
+    &--servicio {
+        --colorEstado: lightblue;
+    }
+
     // Status
     &--habilitado {
-        --colorEstado: #00b9b1;
+        --colorEstado: lightsteelblue;
     }
 
     &--deshabilitado {
-        --colorEstado: orange;
+        --colorEstado: lightblue;
     }
 
     &--clausurado {
-        --colorEstado: red;
+        --colorEstado: darkgray;
     }
 
 	&--baseline {
@@ -979,6 +1037,7 @@ form {
             cursor: pointer;
         }
     }
+
 // Dinamico con .js
     &[top="36.9"] {
         top: 36.9vh;
@@ -1061,10 +1120,12 @@ form {
     padding: 16px;
     box-shadow: 2px 2px 10px 2px gray;
     height: 100%;
-    width: 287px;
+    width: 448px;
     
     .tab-panels {
         padding: 16px 0px;
+        height: calc(100% - 80px);
+        overflow-y: scroll;
     }
 
     .tab-panel {
@@ -1235,7 +1296,7 @@ nav {
 
 .flex {
     @extend %baseFlex;
-    flex-flow: wrap row;
+    flex-flow: row;
     
     &--center {
         @extend %baseFlex;

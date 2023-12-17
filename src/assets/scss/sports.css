@@ -71,8 +71,8 @@
 .icon-tiro:before { content: '\e80d'; } /* '' */
 .icon-vector:before { content: '\e80e'; } /* '' */
 .icon-voley:before { content: '\e80f'; } /* '' */
-.icon-attention:before { content: '\e810'; } /* '' */
-.icon-attention-circled:before { content: '\e811'; } /* '' */
+.icon-clausurado:before { content: '\e810'; } /* '' */
+.icon-deshabilitado:before { content: '\e811'; } /* '' */
 .icon-info-circled:before { content: '\e812'; } /* '' */
 .icon-floppy:before { content: '\e813'; } /* '' */
 .icon-coffee:before { content: '\f0f4'; } /* '' */

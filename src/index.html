@@ -26,22 +26,28 @@
     </section>
   </section>
 
-  <aside id="ingreso" class="panel">
       <!-- boton flotante ingreso/registro -->
-      <button id="btnSidepanel" onclick="expandSidepanel()" class="btn btn__flotante--der btn--colorPrimario">
-        <label for="">
-            +
+      <button onclick="hideIcons()" class="btn btn__flotante--izq btn--colorSecundario">
+        <label id="toggleText" for="">
+           hide icons
         </label>
         <i class=""></i>
     </button>
+  <aside id="ingreso" class="panel">
+      <!-- boton flotante listado/registro -->
+      <button id="btnSidepanel" onclick="expandSidepanel()" class="btn btn__flotante--der btn--colorPrimario">
+        <label id="toggleChevron" for="">
+        </label>
+    </button>
+
 
     <div class="tabSet">
         <nav role="tablist" class="nav__tabs flex flex--center nav__tabs">
             <button id="defaultOpen" role="tab" class="nav__tab" onclick="showTab(event, 'basic')">
-                <p>Add/Edit facility</p>
+                <p>Agregar/editar espacio</p>
             </button>
             <button role="tab" class="nav__tab" onclick="showTab(event, 'list')">
-                <p>List of facilities</p>
+                <p>Listado de espacios</p>
             </button>
       </nav>
       <div class="tab-panels">
@@ -51,28 +57,36 @@
           <form id="test-form" class="form">
             <div class="input__container input__container--between">
               <span>
-                <label for="test-name">Name</label>
-                <input class="input input--rounded" type="text" id="test-name" name="test-name" placeholder="name">
+                <label for="test-name">Nombre</label>
+                <input class="input input--rounded" type="text" id="test-name" name="test-name" placeholder="Ingrese nombre del espacio">
               </span>
               <span>
-                <label for="test-anchor">Key word</label>
-                <input class="input input--rounded" type="text" id="test-anchor" name="test-anchor" placeholder="anchor">
+                <label for="test-anchor">ID</label>
+                <input class="input input--rounded" type="text" id="test-anchor" name="test-anchor" placeholder="Ingrese el ID">
               </span>
               <span>
-                <label for="test-sport">Main sport</label>
-                <input class="input input--rounded" type="text" id="test-sport" name="test-sport" placeholder="sport">
-              </span>
-              <span>
-                <label for="dropStatus">Status</label>
-                <select name="dropStatus" class="input input--rounded" id="dropStatus" onchange="selectStatus(i)">
-                  <option id="0">Select a status</option>
+                <label for="dropSports">Actividad/Servicio</label>
+                <select name="dropSports" class="input input--rounded" id="dropSports" onchange="selectSport(i)">
+                  <option id="0">Seleccione actividad/servicio</option>
                 </select>
               </span>
               <span>
-                <label for="test-desc">Description</label>
-                <textarea class="input input--rounded" type="text" id="test-desc" name="test-desc" placeholder="Description"></textarea>
+                <label for="dropTypes">Tipología</label>
+                <select name="dropTypes" class="input input--rounded" id="dropTypes" onchange="selectType(i)">
+                  <option id="0">Seleccione tipología</option>
+                </select>
               </span>
-              <button class="btn btn--rounded btn--colorSecundario btn--w100" type="submit" id="btn-form">Save facility</button>
+              <span>
+                <label for="dropStatus">Estado</label>
+                <select name="dropStatus" class="input input--rounded" id="dropStatus" onchange="selectStatus(i)">
+                  <option id="0">Seleccione estado</option>
+                </select>
+              </span>
+              <span>
+                <label for="test-desc">Descripción</label>
+                <textarea class="input input--rounded" type="text" id="test-desc" name="test-desc" placeholder="Ingrese una breve descripción del espacio"></textarea>
+              </span>
+              <button class="btn btn--rounded btn--colorSecundario btn--w100" type="submit" id="btn-form">Guardar espacio</button>
             </div>
           </form>
         </section>

@@ -337,7 +337,7 @@ a.menu-item:visited, ul.menu-item:visited, li.menu-item:visited {
 }
 
 p, small {
-  margin: 0;
+  margin: 0.1rem;
 }
 
 /* -------------------------------------
@@ -634,7 +634,7 @@ aside#ingreso {
   }
 }
 aside.panel {
-  --sidepanelWidth: 320px;
+  --sidepanelWidth: 480px;
   position: absolute;
   top: 0;
   left: 100vw;
@@ -655,6 +655,18 @@ aside.panel.panel__swapping {
   100% {
     opacity: 1;
   }
+}
+
+#icons.hide {
+  display: none;
+}
+
+#btnSidepanel > label {
+  font-size: 1.75rem;
+  line-height: 0;
+}
+#btnSidepanel > label::after {
+  content: "‹";
 }
 
 /*--------------------------------------------------------------
@@ -739,7 +751,14 @@ ul.list {
   align-self: center;
   max-width: 50%;
   margin-right: 0.5rem;
+}
+.item .item__container span:nth-child(2) {
   overflow: hidden;
+  text-overflow: ellipsis;
+}
+.item .item__container .icon {
+  opacity: 1;
+  cursor: initial;
 }
 
 .item__icon {
@@ -775,6 +794,10 @@ ul.list {
 .item__subtitle {
   font-weight: 200;
   color: #7d7d7d;
+  max-width: 55%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .item__botonera {
@@ -849,11 +872,20 @@ header.header--flotante {
 .panel .panel__description {
   display: none;
 }
-.panel.active > .panel__description {
+.panel.flex--between.active {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0.75rem 1rem;
+  min-width: 180px;
+  max-width: 320px;
+  height: fit-content;
+}
+.panel.flex--between.active > .panel__description {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 60px;
+}
+.panel.flex--between.active > .icon {
+  opacity: 1;
 }
 .panel.panel--white {
   --colorPanel: white;
@@ -1096,24 +1128,28 @@ button.btn__flotante--der {
 }
 button.btn__flotante--izq {
   padding: 0.5rem;
-  position: sticky;
+  position: absolute;
+  top: 90vh;
+  left: 0;
   height: 40px;
-  top: 10vh;
-  left: 100%;
+  width: 90px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
   z-index: 1;
-  border-top-right-radius: 25px;
-  border-bottom-right-radius: 25px;
 }
 button.btn__flotante--inf {
+  padding: 0.5rem;
   position: absolute;
-  top: calc(100vh - 200px);
-  left: calc(50% - 100px);
-  height: 200px;
-  width: 200px;
-  font-size: 1rem;
+  top: 90vh;
+  left: 200px;
+  height: 40px;
+  width: 50px;
+  font-size: 1.25rem;
   text-transform: uppercase;
-  border-top-left-radius: 50%;
   border-top-right-radius: 50%;
+  border-bottom-right-radius: 50%;
 }
 
 form {
@@ -1269,6 +1305,7 @@ form label {
 
 .icon-container {
   display: flex;
+  position: relative;
 }
 .icon-container[center] {
   text-align: center;
@@ -1292,6 +1329,22 @@ form label {
   margin-bottom: 0.25rem;
 }
 
+.icon ~ .notification__clausurado--true, .icon ~ .notification__deshabilitado--true {
+  position: absolute;
+  background: white;
+  z-index: 1;
+  left: 25px;
+  top: -5px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
 .icon {
   border: solid 3px var(--colorEstado);
   color: var(--colorEstado);
@@ -1301,11 +1354,24 @@ form label {
   display: flex;
   flex-direction: column;
   align-items: center;
+  align-self: start;
   justify-content: center;
   width: 25px;
   height: 25px;
   cursor: pointer;
-  align-self: center;
+}
+.icon ~ .notification__deshabilitado--true {
+  --colorEstado: orange;
+  border: solid var(--colorEstado) 2px;
+  color: var(--colorEstado);
+}
+.icon ~ .notification__clausurado--true {
+  --colorEstado: red;
+  border: solid var(--colorEstado) 2px;
+  color: var(--colorEstado);
+}
+.icon:hover {
+  filter: contrast(125%);
 }
 .icon--24 {
   font-size: 24px;
@@ -1325,14 +1391,20 @@ form label {
 .icon--celeste {
   -webkit-text-fill-color: #d3f1ff;
 }
+.icon--actividad {
+  --colorEstado: lightsteelblue;
+}
+.icon--servicio {
+  --colorEstado: lightblue;
+}
 .icon--habilitado {
-  --colorEstado: #00b9b1;
+  --colorEstado: lightsteelblue;
 }
 .icon--deshabilitado {
-  --colorEstado: orange;
+  --colorEstado: lightblue;
 }
 .icon--clausurado {
-  --colorEstado: red;
+  --colorEstado: darkgray;
 }
 .icon--baseline {
   padding-top: 25%;
@@ -1495,10 +1567,12 @@ form label {
   padding: 16px;
   box-shadow: 2px 2px 10px 2px gray;
   height: 100%;
-  width: 287px;
+  width: 448px;
 }
 .tabSet .tab-panels {
   padding: 16px 0px;
+  height: calc(100% - 80px);
+  overflow-y: scroll;
 }
 .tabSet .tab-panel label {
   color: black;
@@ -1671,7 +1745,7 @@ nav.nav__tabs .nav__tab--active {
 }
 
 .flex {
-  flex-flow: wrap row;
+  flex-flow: row;
 }
 .flex--center {
   justify-content: center;

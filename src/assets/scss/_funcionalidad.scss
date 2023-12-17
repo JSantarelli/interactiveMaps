@@ -2,7 +2,7 @@
 // sidebar
 
 aside.panel {
-    --sidepanelWidth: 320px;
+    --sidepanelWidth: 480px;
     position: absolute;
     top: 0;
     left: 100vw;
@@ -22,3 +22,16 @@ aside.panel {
           100% {opacity: 1;}
       }
     }
+
+// Ocultar iconos
+#icons.hide {
+  display: none;
+} 
+
+#btnSidepanel > label {
+  font-size: 1.75rem;
+  line-height: 0;
+  &::after {
+    content: "\2039";
+  }
+}

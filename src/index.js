@@ -58,8 +58,8 @@ window.addEventListener('DOMContentLoaded', async () => {
                     <p>${facility.description}</p>
                     <p>${facility.status}</p>
                     <p>${facility.sport}</p>
+                    <button class="btn-edit" data-id="${doc.id}" onclick="edit('${doc.id}','${doc.fName}', '${doc.fDescription}','${doc.fStatus}','${doc.fSport}')">Edit</button>
                     <button class="btn-delete" data-id="${doc.id}">Delete</button>
-                    <button class="btn-edit" data-id="${doc.id}">Edit</button>
                 </li> 
             `;
         });
@@ -87,7 +87,8 @@ window.addEventListener('DOMContentLoaded', async () => {
                 editStatus = true;
                 id = doc.id;
 
-                textForm['btn-form'].innerText = 'update'
+                textForm['btn-form'].innerText = 'update';
+                console.log(editStatus)
             })
         })
     });
@@ -99,7 +100,7 @@ function saveForm() {
     const fName = textForm['test-name'];
     const fDescription = textForm['test-desc'];
     const fStatus = textForm['dropStatus'];
-    const fSport = textForm['test-sport'];
+    const fSport = textForm['dropSports'];
 
     if (!editStatus) {
         submitFacility(fName.value, fDescription.value, fStatus.value, fSport.value);
@@ -111,6 +112,8 @@ function saveForm() {
 
     textForm.reset()
 }
+
+
 
 const btnForm = document.getElementById('btn-form');
 btnForm.addEventListener( 'click', saveForm )
