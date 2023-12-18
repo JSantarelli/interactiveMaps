@@ -4,13 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ThreeJS Starter</title>
+    
+         <!-- CRASH COURSE: https://www.youtube.com/watch?v=6oFvqLfRnsU&t=1922s&ab_channel=DesignCourse -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
+        <!-- FIREBASE/JS: https://www.youtube.com/watch?v=ey4k6mW9ds4 -->
+        <!-- <script type="module" src="index.js"></script> -->
+        <!-- <script src="environments/environment.js"></script> -->
         <script src="script.js"></script>
         <script src="./assets/js/interactions.js"></script>
+        <!-- Icons: create a npm package -->
         <script src="https://kit.fontawesome.com/cce30956be.js" crossorigin="anonymous"></script>
 </head>
 <body onload="initial()" class="layout--flex">
+  <!-- <h3 id="demo"></h3> -->
+
   <section id="bienvenida">
     <section id="primerScroll">
       <!-- 3D Model -->
@@ -18,7 +26,7 @@
     </section>
   </section>
 
-    <button onclick="hideIcons()" class="btn btn__flotante--izq btn--colorSecundario">
+      <button onclick="hideIcons()" class="btn btn__flotante--izq btn--colorSecundario">
         <label id="toggleText" for="">
            hide icons
         </label>
@@ -30,6 +38,7 @@
         <label id="toggleChevron" for="">
         </label>
     </button>
+
 
     <div class="tabSet">
         <nav role="tablist" class="nav__tabs flex flex--center nav__tabs">
@@ -82,14 +91,19 @@
         </section>
         <section id="list" class="tab-panel">
             <div id="test-list" class="floating">
+              
             </div>
-          </section> 
+        </section>
+     
         </div>
     </div>
+  
       <div id="container">
           <ul id="holder"></ul>
           <section id="labels"></section>
       </div>
+
   </aside>
+
 </body>
 </html>

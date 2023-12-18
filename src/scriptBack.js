@@ -85,6 +85,7 @@ const loader = new GLTFLoader();
                   </div>
                   <div class="item__botonera">
                         <span class="badge badge--outline badge--${facility.status}">${facility.status}</span>
+                        <button class="btn-edit btn btn--rounded btn--colorSecundario icon-floppy" data-id="${doc.id}"></button>
                         <button class="btn-delete btn btn--rounded btn--colorTerciario icon-trash" data-id="${doc.id}"></button>
                     </div>
                 </div>  
@@ -112,24 +113,24 @@ const loader = new GLTFLoader();
 
           btnsEdit.forEach(btn => {
               btn.addEventListener('click', async event => {
-                try {
-                    const doc = await getFacility(event.target.dataset.id)
-                    const facility = doc.data()
+            //     try {
+            //         const doc = await getFacility(event.target.dataset.id)
+            //         const facility = doc.data()
     
-                    textForm['test-name'].value = facility.name;
-                    textForm['test-desc'].value = facility.description;
-                    textForm['test-anchor'].value = facility.meshName;
-                    textForm['dropTypes'].value = facility.type;
-                    textForm['dropStatus'].value = facility.status;
-                    textForm['dropSports'].value = facility.sport;
+            //         textForm['test-name'].value = facility.name;
+            //         textForm['test-desc'].value = facility.description;
+            //         textForm['test-anchor'].value = facility.meshName;
+            //         textForm['dropTypes'].value = facility.type;
+            //         textForm['dropStatus'].value = facility.status;
+            //         textForm['dropSports'].value = facility.sport;
                    
-                    editStatus = true;
-                    id = doc.id;
-                    textForm['btn-form'].innerText = 'update';
+            //         editStatus = true;
+            //         id = doc.id;
+            //         textForm['btn-form'].innerText = 'update';
                     
-                } catch (error) {
-                    console.log(error);
-                }
+            //     } catch (error) {
+            //         console.log(error);
+            //     }
               })
           })
 
@@ -154,21 +155,22 @@ const loader = new GLTFLoader();
             gltf.scene.traverse(function (child) {
                 // Code to attach annotations to specific model parts...
                 const mesh = (child).clone();
-
+                // console.log(mesh)
                 facilities.forEach(doc => {
                     const facility = doc.data();
 
-                    // 1. Identificar las instalaciones según estado
+                    // 1. Identifica las instalaciones según estado
                     if (mesh.name === facility.meshName) {
+
+                        // Mesh opacity
+                        // model.getObjectByName(mesh.name).material = concrete;
+                        model.getObjectByName(mesh.name).material.transparent = true;
+                        model.getObjectByName(mesh.name).material.opacity = 0;
 
                         // 'Remove' unwanted shape
                         model.getObjectByName('Shape2').material = concrete;
                         model.getObjectByName('Shape2').material.transparent = true;
                         model.getObjectByName('Shape2').material.opacity = 0;
-
-                        // Opacity
-                        model.getObjectByName(facility.meshName).material.transparent = true;
-                        model.getObjectByName(facility.meshName).material.opacity = 0.5;
 
                         // Colors
                         model.getObjectByName('Shape3').material = grass;
@@ -180,10 +182,10 @@ const loader = new GLTFLoader();
                         model.getObjectByName('Shape16').material = grass;
                         model.getObjectByName('Stadium16').material = grass;
                         model.getObjectByName('Shape25').material = grass;
-                        model.getObjectByName('Sup01').material = concrete;
-                        model.getObjectByName('Sup2').material = concrete;
-                        model.getObjectByName('Sup02').material = concrete;
-                        model.getObjectByName('Sup06').material = concrete;
+                        // model.getObjectByName('Sup01').material = concrete;
+                        // model.getObjectByName('Sup2').material = concrete;
+                        // model.getObjectByName('Sup02').material = concrete;
+                        // model.getObjectByName('Sup06').material = concrete;
                         model.getObjectByName('Sup13').material = grass;
                         model.getObjectByName('Sup16').material = grass;
                         model.getObjectByName('Sup17').material = grass;
@@ -214,17 +216,17 @@ const loader = new GLTFLoader();
                         // }
                     }
 
-                        // if (mesh.name === facility.meshName) {
+                        if (mesh.name === facility.meshName) {
 
-                        //     if (facility.status === 'clausurado') {
+                            if (facility.status === 'clausurado') {
                             
-                        //         // 2. Asignar atributos
-                        //         model.getObjectByName(facility.meshName).material = blockColor;
-                        //         model.getObjectByName(facility.meshName).material.transparent = true;
-                        //         model.getObjectByName(facility.meshName).material.opacity = 0.5;
+                                // 2. Asignar atributos
+                                model.getObjectByName(facility.meshName).material = blockColor;
+                                model.getObjectByName(facility.meshName).material.transparent = true;
+                                model.getObjectByName(facility.meshName).material.opacity = 0.5;
 
-                        //     }
-                        // }
+                            }
+                        }
 
                     if(mesh.name === facility.meshName) {
 
@@ -245,8 +247,8 @@ const loader = new GLTFLoader();
                         const annotationDiv = document.createElement('div');
                         annotationDiv.className = 'panel flex flex--between';
                         // annotationDiv.textContent = facility.name;
-                        annotationDiv.innerHTML = `<span class="item__icon icon icon--${facility.status} icon-${facility.sport}"></span>
-                                                    <span class="notification__${facility.status}--${facility.status === 'deshabilitado' || facility.status === 'clausurado'} icon-${facility.status}"></span>
+                        annotationDiv.innerHTML = `<span class="annotation item__icon icon icon--${facility.status} icon-${facility.sport}"></span>
+                                                    <span class="annotation notification__${facility.status}--${facility.status === 'deshabilitado' || facility.status === 'clausurado'} icon-${facility.status}"></span>
                                                     `;
                         annotationDiv.setAttribute("id", doc.id)
                         // annotationDiv.innerHTML = aId;
@@ -302,7 +304,41 @@ const loader = new GLTFLoader();
                 });
             }
         )
-            scene.add( model );
+
+        // Evita rotaciones o cambio de posicion del modelo al actualizar
+        model.matrixAutoUpdate = false;
+
+
+        // Oculta modelo 3D
+        function removeModel() {
+
+            // Remueve modelo
+            model.getObjectByName('Scene').visible = false;
+    
+            // Remueve iconos
+            let i;
+            let removeIcons = document.getElementsByClassName('annotation');
+
+            for (i = 0; i < removeIcons.length; i++) {
+                removeIcons[i].style.display = 'none';
+                console.log(i)
+            }
+            
+            // Remueve todo el canvas
+            // const canvas = document.getElementsByTagName('CANVAS')[0];
+            // canvas.remove();
+        }
+
+        const btnSubmit = document.getElementById('btn-form');
+        btnSubmit.addEventListener('click', removeModel)
+
+        btnsDelete.forEach(btn => {
+            btn.addEventListener('click', async event => {
+                removeModel()
+            })
+        })
+
+        scene.add(model);
 
         // LOADING
         }, function(loading) {
@@ -383,6 +419,8 @@ function listStatus() {
     
 listStatus();
 
+
+
 function saveForm() {
   
       const fName = textForm['test-name'];
@@ -399,8 +437,7 @@ function saveForm() {
               (fName.value, fDescription.value, fAnchor.value, fType.value, fStatus.value, fSport.value)));
           editStatus = false;
       }
-  
-      textForm.reset()
+        textForm.reset()
   }
   
   const btnForm = document.getElementById('btn-form');
@@ -425,10 +462,11 @@ document.body.appendChild( labelRenderer.domElement );
 
 // MATERIALS
 const material2 = new THREE.MeshLambertMaterial({color: 0xfff000});
+const white = new THREE.MeshStandardMaterial({color: 0xffffff});
 const disabledColor = new THREE.MeshStandardMaterial({color: 0xffa500});
 const blockColor = new THREE.MeshStandardMaterial({color: 0xff0000});
 const concrete = new THREE.MeshStandardMaterial({color: 0xa3a3a3});
-const grass = new THREE.MeshStandardMaterial({color: 0x8CAF5C});
+const grass = new THREE.MeshStandardMaterial({color: 0x454B1B});
 
 
 // LIGHTS

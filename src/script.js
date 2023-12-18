@@ -3,14 +3,7 @@ import './assets/scss/sports.css';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import * as dat from 'dat.gui';
-import { GUI } from 'dat.gui';
-import { Mesh } from 'three';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
-import {
-    CSS3DRenderer,
-    CSS3DObject
-  } from 'three/examples/jsm/renderers/CSS3DRenderer.js';
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, getDocs, onSnapshot, deleteDoc, updateDoc, doc, getDoc } from "firebase/firestore";
 
@@ -50,7 +43,6 @@ const loader = new GLTFLoader();
   
   // ------------------------------------------------------------------------------------
   // INDEX.JS
-  // import { submitFacility, onSnapshot, deleteDoc } from './environments/environment.js'
   
   const textForm  = document.getElementById('test-form')
   const faciList = document.getElementById('test-list')
@@ -58,9 +50,7 @@ const loader = new GLTFLoader();
   let id = ''
   
   window.addEventListener('DOMContentLoaded', async () => {
-      
-      // const facilities = await getFacilities()
-        
+              
       onSnapshot(collection(db, 'facilities'), (facilities) => {
           let html = ''
   
@@ -101,7 +91,6 @@ const loader = new GLTFLoader();
                   deleteFacility(dataset.id)
                   console.log(dataset.id)
                   
-                  // REVIEW CAUSE IT'S DUPLICATING DOM ELEMENTS | Tutorial: https://sbcode.net/threejs/glasses/#description
                   facilities.forEach(doc => {
                       const removedItem = document.getElementById(doc.id);
                       if(dataset.id === doc.id) {   
@@ -113,24 +102,7 @@ const loader = new GLTFLoader();
 
           btnsEdit.forEach(btn => {
               btn.addEventListener('click', async event => {
-            //     try {
-            //         const doc = await getFacility(event.target.dataset.id)
-            //         const facility = doc.data()
-    
-            //         textForm['test-name'].value = facility.name;
-            //         textForm['test-desc'].value = facility.description;
-            //         textForm['test-anchor'].value = facility.meshName;
-            //         textForm['dropTypes'].value = facility.type;
-            //         textForm['dropStatus'].value = facility.status;
-            //         textForm['dropSports'].value = facility.sport;
-                   
-            //         editStatus = true;
-            //         id = doc.id;
-            //         textForm['btn-form'].innerText = 'update';
-                    
-            //     } catch (error) {
-            //         console.log(error);
-            //     }
+                // Pending
               })
           })
 
@@ -155,21 +127,18 @@ const loader = new GLTFLoader();
             gltf.scene.traverse(function (child) {
                 // Code to attach annotations to specific model parts...
                 const mesh = (child).clone();
-
                 facilities.forEach(doc => {
                     const facility = doc.data();
 
                     // 1. Identifica las instalaciones según estado
                     if (mesh.name === facility.meshName) {
 
-                        // 'Remove' unwanted shape
-                        model.getObjectByName('Shape2').material = concrete;
-                        model.getObjectByName('Shape2').material.transparent = true;
-                        model.getObjectByName('Shape2').material.opacity = 0;
+                        // Mesh opacity
+                        model.getObjectByName(mesh.name).material.transparent = true;
+                        model.getObjectByName(mesh.name).material.opacity = 0.5;
 
-                        // Opacity
-                        model.getObjectByName(facility.meshName).material.transparent = true;
-                        model.getObjectByName(facility.meshName).material.opacity = 0.5;
+                        // 'Remove' unwanted shape
+                        model.getObjectByName('Shape2').visible = false;
 
                         // Colors
                         model.getObjectByName('Shape3').material = grass;
@@ -181,10 +150,6 @@ const loader = new GLTFLoader();
                         model.getObjectByName('Shape16').material = grass;
                         model.getObjectByName('Stadium16').material = grass;
                         model.getObjectByName('Shape25').material = grass;
-                        model.getObjectByName('Sup01').material = concrete;
-                        model.getObjectByName('Sup2').material = concrete;
-                        model.getObjectByName('Sup02').material = concrete;
-                        model.getObjectByName('Sup06').material = concrete;
                         model.getObjectByName('Sup13').material = grass;
                         model.getObjectByName('Sup16').material = grass;
                         model.getObjectByName('Sup17').material = grass;
@@ -204,15 +169,6 @@ const loader = new GLTFLoader();
                         model.getObjectByName('Vel101').material = grass;
                         model.getObjectByName('Vel102').material = grass;
                         model.getObjectByName('Vel103').material = grass;
-                        
-                        // Colorea edificios según estados
-                        // if (facility.status === 'deshabilitado') {
-                        
-                        //     // 2. Asignar atributos
-                        //     model.getObjectByName(facility.meshName).material = disabledColor;
-                        //     model.getObjectByName(facility.meshName).material.transparent = true;
-                        //     model.getObjectByName(facility.meshName).material.opacity = 0.5;
-                        // }
                     }
 
                         if (mesh.name === facility.meshName) {
@@ -245,14 +201,12 @@ const loader = new GLTFLoader();
                         // Creating HTML
                         const annotationDiv = document.createElement('div');
                         annotationDiv.className = 'panel flex flex--between';
-                        // annotationDiv.textContent = facility.name;
                         annotationDiv.innerHTML = `<span class="annotation item__icon icon icon--${facility.status} icon-${facility.sport}"></span>
                                                     <span class="annotation notification__${facility.status}--${facility.status === 'deshabilitado' || facility.status === 'clausurado'} icon-${facility.status}"></span>
                                                     `;
                         annotationDiv.setAttribute("id", doc.id)
                         // annotationDiv.innerHTML = aId;
                         const annotationLabel = new CSS2DObject(annotationDiv);
-                        // annotationLabel.position.set(150, 5, 0);
                         child.add(annotationLabel);
 
                         // Adding interaction
@@ -273,25 +227,20 @@ const loader = new GLTFLoader();
                             let active = document.querySelectorAll(".panel.active");
                             for(let j = 0; j < active.length; j++){
                                 active[j].classList.remove("active");
-                                // active[j].nextElementSibling.style.maxHeight = null;
                             }
                             this.classList.toggle("active");
-                            //   panel.style.maxHeight = panel.scrollHeight + "px";
                             }
                             });
                             }              
                         }
 
                         if (annotationDisplay) {
-                            // annotationDisplay = true;
-
                             annotationTextDiv.innerHTML +=
                                 `<span class="badge badge--outline badge--${facility.status}">${facility.status}</span>
                                 <p class="panel__texto--blanco">${facility.name}</p>
                                 <small class="panel__texto--blanco">${facility.description}</small>`
                         } 
 
-                        // console.log(annotations[aId]);
                         annotationDiv.appendChild(annotationTextDiv)
                         annotations.descriptionDomElement =
                             annotationTextDiv
@@ -304,25 +253,25 @@ const loader = new GLTFLoader();
             }
         )
 
-
         // Evita rotaciones o cambio de posicion del modelo al actualizar
         model.matrixAutoUpdate = false;
-        
+
 
         // Oculta modelo 3D
         function removeModel() {
-            // Eliminación selectiva
+
+            // Remueve modelo
+            model.getObjectByName('Scene').visible = false;
+            const entireMesh = model.getObjectByName('Scene');
+            entireMesh.remove();
+
+            // Remueve iconos
             let i;
             let removeIcons = document.getElementsByClassName('annotation');
-            const sup04  = model.getObjectByName('Sup04');
-            sup04.material.opacity = 0;
+
             for (i = 0; i < removeIcons.length; i++) {
                 removeIcons[i].style.display = 'none';
-                console.log(i)
             }
-            // Remueve todo el canvas
-            // const canvas = document.getElementsByTagName('CANVAS')[0];
-            // canvas.remove();
         }
 
         const btnSubmit = document.getElementById('btn-form');
@@ -380,12 +329,9 @@ typesDropdown.addEventListener('click', selectType)
 
 function selectType(i) {
     let typesValue = typesDropdown.options[typesDropdown.selectedIndex]
-    console.log(typesValue.value)
     }
     
 function listTypes() {     
-    // let opt = createElement('option')
-    // for (let i = 0; i < countries.length; i++) {
         for (let i in types) {
             // Crear un elemento HTML <option> y asignarle los valores del array
             typesDropdown.innerHTML += `<option>${types[i]}</option>`
@@ -401,12 +347,9 @@ dropdown.addEventListener('click', selectStatus)
 
 function selectStatus(i) {
     let statusValue = dropdown.options[dropdown.selectedIndex]
-    console.log(statusValue.value)
     }
     
 function listStatus() {     
-    // let opt = createElement('option')
-    // for (let i = 0; i < countries.length; i++) {
         for (let i in status) {
             // Crear un elemento HTML <option> y asignarle los valores del array
             dropdown.innerHTML += `<option>${status[i]}</option>`
@@ -415,10 +358,7 @@ function listStatus() {
     
 listStatus();
 
-
-
 function saveForm() {
-  
       const fName = textForm['test-name'];
       const fDescription = textForm['test-desc'];
       const fAnchor = textForm['test-anchor'];
@@ -458,6 +398,7 @@ document.body.appendChild( labelRenderer.domElement );
 
 // MATERIALS
 const material2 = new THREE.MeshLambertMaterial({color: 0xfff000});
+const white = new THREE.MeshStandardMaterial({color: 0xffffff});
 const disabledColor = new THREE.MeshStandardMaterial({color: 0xffa500});
 const blockColor = new THREE.MeshStandardMaterial({color: 0xff0000});
 const concrete = new THREE.MeshStandardMaterial({color: 0xa3a3a3});
@@ -513,25 +454,7 @@ function onMouseMove(event) {
     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     mouse.y = ( event.clientY / window.innerHeight ) * 2 + 1;
 
-    var intersects = raycaster.intersectObjects(scene.children, true);
-
     raycaster.setFromCamera(mouse, camera, material2);
-
-    // Cambia color al clickear cara inferior de la malla
-    for (var i = 0; i < intersects.length; i++) {
-
-        // console.log('touched!')
-
-        // var color = (Math.random() * 0xffffff);
-
-        // intersects[0].object.material.color.setHex(color);
-
-        // this.temp = intersects[0].object.material.color.getHexString()
-
-        // document.getElementById("demo").innerHTML = "Object color is " + this.temp
-        
-        // this.tl = new TimelineMax().delay(.3);
-    }
 }
 
 window.addEventListener('click', onMouseMove);
@@ -582,7 +505,6 @@ const tick = () =>
 
     targetX = mouseX * .001
     targetY = mouseY * .001
-
 
     // Render
     renderer.render(scene, camera);
