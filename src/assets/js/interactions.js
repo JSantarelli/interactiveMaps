@@ -1,9 +1,10 @@
 // show/hide sidepanel
 function expandSidepanel() {
-    document.getElementById('ingreso').classList.toggle('panel__swapping');
-    const btnChevron = document.getElementById('toggleChevron'); 
-    btnChevron.style.transform = "rotate(0deg)"
+  document.getElementById('lateral').classList.toggle('panel__swapping');
+  const btnChevron = document.getElementById('toggleChevron'); 
+  btnChevron.style.transform = "rotate(180deg)"
 }
+
 
 // tabs
 function showTab(event, category) {
@@ -27,9 +28,9 @@ function showTab(event, category) {
   function hideIcons() {
     document.getElementById('icons').classList.toggle('hide');
     const btnIcons = document.getElementById('toggleText');
-    if (btnIcons.innerHTML === 'hide icons') {
-      btnIcons.innerHTML = 'show icons';
+    if (btnIcons.innerHTML === 'ocultar iconos') {
+      btnIcons.innerHTML = 'mostrar iconos';
     } else {
-      btnIcons.innerHTML = 'hide icons';
+      btnIcons.innerHTML = 'ocultar iconos';
     }
   }

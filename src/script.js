@@ -6,7 +6,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { CSS2DRenderer, CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, getDocs, onSnapshot, deleteDoc, updateDoc, doc, getDoc } from "firebase/firestore";
-
+import './assets/js/form';
 
 // SETUP
 const canvas = document.querySelector('canvas.webgl')
@@ -29,24 +29,17 @@ const loader = new GLTFLoader();
       export const submitFacility = (name, description, meshName, type, status, sport) => {
         addDoc(collection(db, "facilities"), {name, description, meshName, type, status, sport});
       }
-      
       export const getFacilities = () => getDocs(collection(db, 'facilities'));
-  
       export const getFacility = () => getDoc(doc(db, 'facilities', id));
-  
       export const onGetFacilities = (callback) => onSnapshot(collection(db, 'facilities'), callback);
-  
       export const deleteFacility = (id) => deleteDoc((doc(db, 'facilities', id)));
       export const editFacility = (id) => updateDoc((doc(db, 'facilities', id)));
-  
       export const updateFacility = (id, newFields) => updateDoc(doc(db, 'facilities', id), newFields)
   
   // ------------------------------------------------------------------------------------
   // INDEX.JS
   
-  const textForm  = document.getElementById('test-form')
   const faciList = document.getElementById('test-list')
-  let editStatus = false;
   let id = ''
   
   window.addEventListener('DOMContentLoaded', async () => {
@@ -110,18 +103,18 @@ const loader = new GLTFLoader();
         let annotationCounter = 0
 
         // Create empty object and array
-        let annotations = {}
-        const annotationMarkers = []
+        let annotations = {};
+        const annotationMarkers = [];
         let annotationDisplay = true;
+
+        const clock = new THREE.Clock();
           
         // 3D MODEL            
         loader.load( "/models/park.gltf", function ( gltf ) {
             const model = gltf.scene
 
-            const elapsedTime = clock.getElapsedTime()
+            const elapsedTime = clock.getElapsedTime();
             if (model) model.rotation.y = .5 * elapsedTime;
-
-            // gltf.scene.scale.set(0.5, 0.5, 0.5); 
 
         // Getting an individual mesh from 3D Object
             gltf.scene.traverse(function (child) {
@@ -140,7 +133,7 @@ const loader = new GLTFLoader();
                         // 'Remove' unwanted shape
                         model.getObjectByName('Shape2').visible = false;
 
-                        // Colors
+                        // Colors | TO-DO: Agrupar usando '.group'
                         model.getObjectByName('Shape3').material = grass;
                         model.getObjectByName('Shape4').material = grass;
                         model.getObjectByName('Shape5').material = grass;
@@ -174,12 +167,10 @@ const loader = new GLTFLoader();
                         if (mesh.name === facility.meshName) {
 
                             if (facility.status === 'clausurado') {
-                            
                                 // 2. Asignar atributos
                                 model.getObjectByName(facility.meshName).material = blockColor;
                                 model.getObjectByName(facility.meshName).material.transparent = true;
                                 model.getObjectByName(facility.meshName).material.opacity = 0.5;
-
                             }
                         }
 
@@ -194,7 +185,6 @@ const loader = new GLTFLoader();
                             description: facility.description,
                         }
                         
-                        // if (myObj.facilities[aId].name) {
                         const annotationTextDiv = document.createElement('div')
                         annotationTextDiv.className = 'panel__description'
                         
@@ -205,7 +195,6 @@ const loader = new GLTFLoader();
                                                     <span class="annotation notification__${facility.status}--${facility.status === 'deshabilitado' || facility.status === 'clausurado'} icon-${facility.status}"></span>
                                                     `;
                         annotationDiv.setAttribute("id", doc.id)
-                        // annotationDiv.innerHTML = aId;
                         const annotationLabel = new CSS2DObject(annotationDiv);
                         child.add(annotationLabel);
 
@@ -218,19 +207,23 @@ const loader = new GLTFLoader();
                             var i;
                             
                             for (i = 0; i < acc.length; i++) {
-                            acc[i].addEventListener("click", function() {
-                            
-                            var panel = this.nextElementSibling;
-                            if (panel.style.maxHeight){
-                            //   panel.style.maxHeight = null;
-                            } else {
-                            let active = document.querySelectorAll(".panel.active");
-                            for(let j = 0; j < active.length; j++){
-                                active[j].classList.remove("active");
-                            }
-                            this.classList.toggle("active");
-                            }
-                            });
+                                acc[i].addEventListener("click", function() {
+                                    
+                                    var panel = this.nextElementSibling;
+                                    
+                                    if (panel.style.maxHeight){
+                                    } else {
+
+                                        let active = document.querySelectorAll(".panel.active");
+                                        
+                                        for(let j = 0; j < active.length; j++){
+                                            active[j].classList.remove("active");
+                                        }
+
+                                        this.classList.toggle("active");
+
+                                    }
+                                });
                             }              
                         }
 
@@ -298,89 +291,8 @@ const loader = new GLTFLoader();
   
       });
 
-//----------------------------------------------------------------
-// FORM
-
-// Dropdowns
-let sports = ['arco','atletismo','basquet','bochas','ciclismo','esgrima','futbol','handbol','natacion','hockey','patinaje','skate','tenis','tiro','vector','voley','attention','info-circled','floppy','coffee','food','female','male','taxi','trash','bicycle','bus','train','wheelchair-alt'];
-
-let dropdown2 = document.getElementById('dropSports') // .text || .index
-dropdown2.addEventListener('click', selectSport)
-
-function selectSport(i) {
-    let sportsValue = dropdown2.options[dropdown2.selectedIndex]
-    console.log(sportsValue.value)
-    }
-
-        
-function listSports() {     
-        for (let i in sports) {
-            // Crear un elemento HTML <option> y asignarle los valores del array
-            dropdown2.innerHTML += `<option>${sports[i]}</option>`
-        }
-    }
-    
-listSports();
-
-let types = ['actividad deportiva', 'servicio complementario'];
-
-let typesDropdown = document.getElementById('dropTypes') // .text || .index
-typesDropdown.addEventListener('click', selectType)
-
-function selectType(i) {
-    let typesValue = typesDropdown.options[typesDropdown.selectedIndex]
-    }
-    
-function listTypes() {     
-        for (let i in types) {
-            // Crear un elemento HTML <option> y asignarle los valores del array
-            typesDropdown.innerHTML += `<option>${types[i]}</option>`
-        }
-    }
-    
-listTypes();
-
-let status = ['habilitado', 'deshabilitado', 'clausurado'];
-
-let dropdown = document.getElementById('dropStatus') // .text || .index
-dropdown.addEventListener('click', selectStatus)
-
-function selectStatus(i) {
-    let statusValue = dropdown.options[dropdown.selectedIndex]
-    }
-    
-function listStatus() {     
-        for (let i in status) {
-            // Crear un elemento HTML <option> y asignarle los valores del array
-            dropdown.innerHTML += `<option>${status[i]}</option>`
-        }
-    }
-    
-listStatus();
-
-function saveForm() {
-      const fName = textForm['test-name'];
-      const fDescription = textForm['test-desc'];
-      const fAnchor = textForm['test-anchor'];
-      const fType = textForm['dropTypes'];
-      const fStatus = textForm['dropStatus'];
-      const fSport = textForm['dropSports'];
-  
-      if (!editStatus) {
-          submitFacility(fName.value, fDescription.value, fAnchor.value, fType.value, fStatus.value, fSport.value);
-      } else {
-          updateFacility(id, (
-              (fName.value, fDescription.value, fAnchor.value, fType.value, fStatus.value, fSport.value)));
-          editStatus = false;
-      }
-        textForm.reset()
-  }
-  
-  const btnForm = document.getElementById('btn-form');
-  btnForm.addEventListener( 'click', saveForm )
 
   // ------------------------------------------------------------------------------------
-
 // SCENE
 const scene = new THREE.Scene()
 scene.background = new THREE.Color(0xffffff)
@@ -438,15 +350,26 @@ camera.position.set( -1900, 500, 900)
 scene.add(camera)
 
 // CONTROLS
-const controls = new OrbitControls(camera, labelRenderer.domElement)
-controls.enableDamping = true
-// controls.autoRotate = true
+const controls = new OrbitControls(camera, labelRenderer.domElement);
+controls.enableDamping = true;
+controls.autoRotate = true;
+controls.autoRotaterotateSpeed = 1.0;
+
 
 // HELPERS
 
 // INTERACTIVITY
 var raycaster = new THREE.Raycaster();
 var mouse = new THREE.Vector2();
+
+// Stops rotation on click
+const btnSidepanel = document.getElementById('btnSidepanel');
+
+function stopRotation() {
+    controls.autoRotate = !controls.autoRotate;
+}
+
+btnSidepanel.addEventListener('click', stopRotation);
 
 // based on interaction with object
 function onMouseMove(event) {
@@ -490,19 +413,8 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  */
 
 // based on a function
-var render = function() {
-    requestAnimationFrame(render);
-    
-    renderer.render(scene, camera)
-}
-
-render();
-
-const clock = new THREE.Clock()
-
 const tick = () =>
 {
-
     targetX = mouseX * .001
     targetY = mouseY * .001
 
@@ -510,48 +422,11 @@ const tick = () =>
     renderer.render(scene, camera);
     labelRenderer.render( scene, camera );
 
+    // Ejecuta giro y suavizado en los controles
+    controls.update();
+
     // Call tick again on the next frame
     window.requestAnimationFrame(tick)
 }
 
 tick()
-
-// EDIT
-function editar(id, fName, fDescription, fType, fStatus, fSport) {
-    console.log('hola!')
-    document.getElementById('test-name').value = fName;
-    document.getElementById('test-des').value = fDescription;
-    document.getElementById('dropTypes').value = fType;
-    document.getElementById('dropStatus').value = fStatus;
-    document.getElementById('dropSports').value = fSport;
-
-    var boton = document.getElementById('btn-form');
-
-    boton.innerHTML = 'Save updates';
-    boton.onclick = function saveForm() {
-
-    var parkFacilities = db.collection("facilities").doc(id);
-
-    var fName = document.getElementById('test-name').value;
-    var fDescription = document.getElementById('test-des').value;
-    var fType = document.getElementById('dropTypes').value;
-    var fStatus = document.getElementById('dropStatus').value;
-    var fSport = document.getElementById('dropSports').value;
-
-    return parkFacilities.update ({
-        name: fName,
-        description: fDescription,
-        type: fType,
-        status: fStatus,
-        sport: fSport
-    })
-
-    .then(function() {
-        console.log("Document successfully updated!");
-    })
-
-    .catch(function(error) {
-        console.log("Document error!");
-    })
-    }
-    }

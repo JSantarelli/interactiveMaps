@@ -386,7 +386,7 @@ p, small {
   border-top: solid 1px gray;
 }
 
-aside#ingreso {
+aside#lateral {
   position: absolute;
   z-index: 1;
 }

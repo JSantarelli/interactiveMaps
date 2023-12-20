@@ -6,9 +6,9 @@
     <title>ThreeJS Starter</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/102/three.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.2/TweenMax.min.js"></script>
-        <script src="script.js"></script>
+        <script defer src="script.js"></script>
+        <!-- <script defer src="./assets/js/form.js"></script> -->
         <script src="./assets/js/interactions.js"></script>
-        <script src="https://kit.fontawesome.com/cce30956be.js" crossorigin="anonymous"></script>
 </head>
 <body onload="initial()" class="layout--flex">
   <section id="bienvenida">
@@ -20,11 +20,11 @@
 
     <button onclick="hideIcons()" class="btn btn__flotante--izq btn--colorSecundario">
         <label id="toggleText" for="">
-           hide icons
+           ocultar iconos
         </label>
         <i class=""></i>
     </button>
-  <aside id="ingreso" class="panel">
+  <aside id="lateral" class="panel">
       <!-- boton flotante listado/registro -->
       <button id="btnSidepanel" onclick="expandSidepanel()" class="btn btn__flotante--der btn--colorPrimario">
         <label id="toggleChevron" for="">
