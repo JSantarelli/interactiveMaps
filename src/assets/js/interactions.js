@@ -1,3 +1,18 @@
+// Active first tab
+function initial() {
+  document.getElementById("defaultOpen").click();
+}
+
+function hideIcons() {
+  document.getElementById('icons').classList.toggle('hide');
+  const btnIcons = document.getElementById('toggleText');
+  if (btnIcons.innerHTML === 'ocultar iconos') {
+    btnIcons.innerHTML = 'mostrar iconos';
+  } else {
+    btnIcons.innerHTML = 'ocultar iconos';
+  }
+}
+
 // show/hide sidepanel
 function expandSidepanel() {
   document.getElementById('lateral').classList.toggle('panel__swapping');
@@ -19,18 +34,4 @@ function showTab(event, category) {
     }
     document.getElementById(category).style.display = "block";
     event.currentTarget.className += " nav__tab--active";
-  }
-
- function initial() {
-    document.getElementById("defaultOpen").click();
-  }
-
-  function hideIcons() {
-    document.getElementById('icons').classList.toggle('hide');
-    const btnIcons = document.getElementById('toggleText');
-    if (btnIcons.innerHTML === 'ocultar iconos') {
-      btnIcons.innerHTML = 'mostrar iconos';
-    } else {
-      btnIcons.innerHTML = 'ocultar iconos';
-    }
   }

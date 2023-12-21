@@ -1,5 +1,4 @@
-import { submitFacility } from "../../script";
-
+import { submitFacility } from "./../js/settings";
 
 // FORM
 const textForm  = document.getElementById('test-form')
@@ -17,7 +16,6 @@ function selectSport(i) {
     console.log(sportsValue.value)
     }
 
-        
 function listSports() {     
         for (let i in sports) {
             // Crear un elemento HTML <option> y asignarle los valores del array
