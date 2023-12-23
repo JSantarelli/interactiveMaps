@@ -21,7 +21,7 @@ window.addEventListener('DOMContentLoaded', async () => {
             <div class="item">
                 <div class="item__container" left>
                 <div class="icon-container">
-                    <span class="item__icon icon icon--${facility.status} icon-${facility.sport}"></span>
+                    <span class="item__icon icon icon--${facility.type} icon-${facility.sport}"></span>
                     <span class="notification__${facility.status}--${facility.status === 'deshabilitado' || facility.status === 'clausurado'} icon-${facility.status}"></span>                      
                 </div>
                 <span>
@@ -94,7 +94,6 @@ window.addEventListener('DOMContentLoaded', async () => {
                 if (mesh.name === facility.meshName) {
 
                     // Mesh opacity
-                    // model.getObjectByName(mesh.name).material = grass;
                     model.getObjectByName(mesh.name).material.transparent = true;
                     model.getObjectByName(mesh.name).material.opacity = 0.5;
 
@@ -159,7 +158,7 @@ window.addEventListener('DOMContentLoaded', async () => {
                     // Creating HTML
                     const annotationDiv = document.createElement('div');
                     annotationDiv.className = 'panel flex flex--between';
-                    annotationDiv.innerHTML = `<span class="annotation item__icon icon icon--${facility.status} icon-${facility.sport}"></span>
+                    annotationDiv.innerHTML = `<span class="annotation item__icon icon icon--${facility.type} icon-${facility.sport}"></span>
                                                 <span class="annotation notification__${facility.status}--${facility.status === 'deshabilitado' || facility.status === 'clausurado'} icon-${facility.status}"></span>
                                                 `;
                     annotationDiv.setAttribute("id", doc.id)

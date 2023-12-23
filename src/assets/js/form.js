@@ -6,7 +6,7 @@ let editStatus = false;
 let i = '';
 
 // Dropdowns
-let sports = ['arco','atletismo','basquet','bochas','ciclismo','esgrima','futbol','handbol','natacion','hockey','patinaje','skate','tenis','tiro','vector','voley','attention','info-circled','floppy','coffee','food','female','male','taxi','trash','bicycle','bus','train','wheelchair-alt'];
+let sports = ['arco','atletismo','basquet','bochas','ciclismo','esgrima','futbol','handbol','natacion','hockey','patinaje','skate','tenis','tiro','voley','attention','info-circled','floppy','coffee','food','female','male','taxi','trash','bicycle','bus','train','wheelchair-alt'];
 
 const dropdown2 = document.getElementById('dropSports') // .text || .index
 dropdown2.addEventListener('click', selectSport)
@@ -25,7 +25,7 @@ function listSports() {
     
 listSports();
 
-let types = ['actividad deportiva', 'servicio complementario'];
+let types = ['actividad', 'servicio'];
 
 const typesDropdown = document.getElementById('dropTypes') // .text || .index
 typesDropdown.addEventListener('click', selectType)

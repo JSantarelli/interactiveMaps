@@ -109,6 +109,11 @@ ul {
             cursor: initial;
         }
     }
+
+    &:hover {
+        background-color: #e9e9e9;
+        cursor: pointer;
+    }
 }
 
 .item__icon {
@@ -891,26 +896,6 @@ form {
 	}
 	
     // Modificadores cromáticos
-	&--magenta {
-		-webkit-text-fill-color: $magenta;
-	}
-    
-    &--colorPrimario {
-        -webkit-text-fill-color: $colorPrimario;
-    }
-
-	&--colorSecundario {
-		-webkit-text-fill-color: $colorSecundario;
-	}
-
-	&--colorTerciario {
-		-webkit-text-fill-color: $colorTerciario;
-	}
-
-	&--celeste {
-		-webkit-text-fill-color: $celeste;
-	}
-
     // Types
     &--actividad {
         --colorEstado: lightsteelblue;
@@ -919,23 +904,6 @@ form {
     &--servicio {
         --colorEstado: lightblue;
     }
-
-    // Status
-    &--habilitado {
-        --colorEstado: lightsteelblue;
-    }
-
-    &--deshabilitado {
-        --colorEstado: lightblue;
-    }
-
-    &--clausurado {
-        --colorEstado: darkgray;
-    }
-
-	&--baseline {
-		padding-top: 25%;
-	}
 }
 
 // Accordion

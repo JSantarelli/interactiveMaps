@@ -760,6 +760,10 @@ ul.list {
   opacity: 1;
   cursor: initial;
 }
+.item:hover {
+  background-color: #e9e9e9;
+  cursor: pointer;
+}
 
 .item__icon {
   margin-right: 0.5rem;
@@ -1382,38 +1386,11 @@ form label {
 .icon--24 {
   font-size: 24px;
 }
-.icon--magenta {
-  -webkit-text-fill-color: #e3007e;
-}
-.icon--colorPrimario {
-  -webkit-text-fill-color: #243163;
-}
-.icon--colorSecundario {
-  -webkit-text-fill-color: #00a1df;
-}
-.icon--colorTerciario {
-  -webkit-text-fill-color: #cb0053;
-}
-.icon--celeste {
-  -webkit-text-fill-color: #d3f1ff;
-}
 .icon--actividad {
   --colorEstado: lightsteelblue;
 }
 .icon--servicio {
   --colorEstado: lightblue;
-}
-.icon--habilitado {
-  --colorEstado: lightsteelblue;
-}
-.icon--deshabilitado {
-  --colorEstado: lightblue;
-}
-.icon--clausurado {
-  --colorEstado: darkgray;
-}
-.icon--baseline {
-  padding-top: 25%;
 }
 
 [accordion] {
